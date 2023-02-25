@@ -1,3 +1,13 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+
+import Model.Cell.Cell;
+import Model.Cell.Tokens.CellToken;
+import Model.Cell.Tokens.Token;
+import Model.Spreadsheet.Spreadsheet;
+
 /*
  * Driver program of a spreadsheet application.
  * Text-based user interface.
@@ -16,7 +26,6 @@ public class SpreadsheetApp {
     public static String readString() {
         BufferedReader inputReader;
         String returnString = "";
-        char ch;
         
         inputReader = new BufferedReader (new InputStreamReader(System.in));
         
@@ -41,9 +50,9 @@ public class SpreadsheetApp {
     
         System.out.println("Enter the cell: ");
         inputString = readString();
-        getCellToken(inputString, 0, cellToken);
+        CellToken.getCellToken(inputString, 0, cellToken);
     
-        System.out.println(printCellToken(cellID));
+        System.out.println(cellToken.printCellToken());
         System.out.println(": ");
     
         if ((cellToken.getRow() < 0) ||
@@ -68,13 +77,13 @@ public class SpreadsheetApp {
     private static void menuChangeCellFormula(Spreadsheet theSpreadsheet) {
         String inputCell;
         String inputFormula;
-        CellToken cellToken;
-        Stack expTreeTokenStack;
+        CellToken cellToken = new CellToken();
+        Stack<Token> expTreeTokenStack;
         // ExpressionTreeToken expTreeToken;
     
         System.out.println("Enter the cell to change: ");
         inputCell = readString();
-        theSpreadsheet.getCellToken (inputCell, 0, cellToken);
+        CellToken.getCellToken (inputCell, 0, cellToken);
     
         // error check to make sure the row and column
         // are within spreadsheet array bounds.
@@ -89,7 +98,7 @@ public class SpreadsheetApp {
     
         System.out.println("Enter the cell's new formula: ");
         inputFormula = readString();
-        expTreeTokenStack = getFormula (inputFormula);
+        expTreeTokenStack = Cell.getFormula(inputFormula);
     
         /*
         // This code prints out the expression stack from
@@ -108,7 +117,7 @@ public class SpreadsheetApp {
     public static void main(String[] args) {
         Spreadsheet theSpreadsheet = new Spreadsheet(8);
 
-        bool done = false;
+        boolean done = false;
         String command = "";
     
         System.out.println(">>> Welcome to the TCSS 342 Spreadsheet <<<");
