@@ -119,6 +119,7 @@ public class CellToken extends Token {
     }
 
     // ASSERT: index now points to the first non-whitespace character
+    // ASSERT: index now points to the first non-whitespace character
 
     ch = inputString.charAt(index);            
     // process CAPITAL alphabetic characters to calculate the column
@@ -141,7 +142,7 @@ public class CellToken extends Token {
         }
     }
     if (index == inputString.length() ) {
-        // reached the end of the string before fully parsing the cell reference
+        // reached the end of the string before fully parsing the cell the reference
         cellToken.setColumn(CellToken.BADCELL);
         cellToken.setRow(CellToken.BADCELL);
         return index;
