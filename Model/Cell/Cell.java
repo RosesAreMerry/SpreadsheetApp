@@ -1,11 +1,11 @@
-package Model.Cell;
+package Cell;
 
 import java.util.Stack;
 
-import Model.Cell.Tokens.CellToken;
-import Model.Cell.Tokens.LiteralToken;
-import Model.Cell.Tokens.OperatorToken;
-import Model.Cell.Tokens.Token;
+import Cell.Tokens.CellToken;
+import Cell.Tokens.LiteralToken;
+import Cell.Tokens.OperatorToken;
+import Cell.Tokens.Token;
 
 public class Cell {
   Cell(String row, int column, String formula) {

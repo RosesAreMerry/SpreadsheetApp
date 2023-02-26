@@ -1,4 +1,4 @@
-package Model.Cell.Tokens;
+package Cell.Tokens;
 
 public class OperatorToken extends Token {
 
