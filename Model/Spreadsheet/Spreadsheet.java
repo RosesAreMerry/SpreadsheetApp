@@ -9,15 +9,16 @@ import Cell.Tokens.Token;
 public class Spreadsheet {
 	//two dimensional array of cells
 	private Cell[][] cell;
-	private static int dimentions = 8;
+	private static int dimentions = 4;
 	
 	
   public Spreadsheet(int dimentions) {
+	  this.dimentions= dimentions;
 	  cell = new Cell[dimentions][dimentions];
   }
 
   public void printValues() {
-    //TODO(Write Method)
+    
   }
   
   public void printCellFormula(CellToken cellToken) {
