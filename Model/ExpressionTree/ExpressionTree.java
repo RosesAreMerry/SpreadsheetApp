@@ -13,7 +13,7 @@ public class ExpressionTree {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	
-	public int Evaluate(Spreadsheet spreadsheet) {
+	public int evaluate(Spreadsheet spreadsheet) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

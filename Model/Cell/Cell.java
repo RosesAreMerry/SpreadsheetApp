@@ -55,42 +55,27 @@ public class Cell {
   }
 
   public void recalculate() {
-    Integer val1 = null;
-    Integer val2 = null;
+    Stack<Integer> currentValues = new Stack<Integer>();
     int result = 0;
 
     while (!postfixFormula.isEmpty()) {
       Token token = postfixFormula.pop();
       Integer value = null;
       if (token instanceof LiteralToken) {
-        value = ((LiteralToken) token).getValue();
+        currentValues.push(((LiteralToken) token).getValue());
       } else if (token instanceof CellToken) {
-        value = getCellValue.apply((CellToken) token);
+        currentValues.push(getCellValue.apply((CellToken) token));
       } else if (token instanceof OperatorToken) {
-        if (val1 != null && val2 != null) {
-          value = ((OperatorToken) token).evaluate(val1, val2);
+        if (currentValues.size() >= 2) {
+          value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
           postfixFormula.push(new LiteralToken(value));
-          val1 = null;
-          val2 = null;
-        } else if (val1 != null) {
-          val2 = ((OperatorToken) token).evaluate(val1, 0);
-        } else {
-          val1 = ((OperatorToken) token).evaluate(0, 0);
-        }
-        continue;
-      }
-      if (value != null) {
-        if (val1 == null) {
-          val1 = value;
-        } else if (val2 == null) {
-          val2 = value;
         }
       }
-      if (postfixFormula.size() == 0) {
-        result = value;
+      if(postfixFormula.size() == 1 && postfixFormula.peek() instanceof LiteralToken) {
+        result = ((LiteralToken) postfixFormula.pop()).getValue();
       }
     }
-    value = result;
+    this.value = result;
   }
 
   /**

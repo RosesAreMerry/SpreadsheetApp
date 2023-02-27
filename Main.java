@@ -9,7 +9,7 @@ public class Main {
     Function<CellToken, Integer> getCellToken = (cell) -> {
       return 0;
     };
-    Cell cell = new Cell(1, 1, "2*2+1+5+3", getCellToken);
+    Cell cell = new Cell(1, 1, "5(5+1", getCellToken);
 
     System.out.println(cell.getValue());
     System.out.println(cell.getFormula());
