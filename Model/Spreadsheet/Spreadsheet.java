@@ -2,6 +2,7 @@ package Spreadsheet;
 
 import java.util.Stack;
 
+import Cell.Cell;
 import Cell.Tokens.CellToken;
 import Cell.Tokens.Token;
 
@@ -12,20 +13,11 @@ public class Spreadsheet {
 	
 	
   public Spreadsheet(int dimentions) {
-<<<<<<< HEAD
-	  cell= new cell[dimentions][dimentions];
-=======
-    //TODO(Write Constructor) 
->>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
+	  cell = new Cell[dimentions][dimentions];
   }
 
   public void printValues() {
-<<<<<<< HEAD
-	  
-    throw new UnsupportedOperationException("Not supported yet.");
-=======
     //TODO(Write Method)
->>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
   }
   
   public void printCellFormula(CellToken cellToken) {

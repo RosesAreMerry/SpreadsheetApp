@@ -1,4 +1,6 @@
-package Model.ExpressionTree;
+package ExpressionTree;
+
+import Spreadsheet.Spreadsheet;
 
 public class ExpressionTree {
 	private ExpressionTreeNode root;

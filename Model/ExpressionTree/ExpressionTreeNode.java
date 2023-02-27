@@ -1,20 +1,21 @@
-package Model.ExpressionTree;
+package ExpressionTree;
 
-public class ExpressionTreeNode() {
+import Cell.Tokens.Token;
+
+public class ExpressionTreeNode {
 	private Token token;
 	ExpressionTreeNode left;
-	ExpressionTreeNode Right;
+	ExpressionTreeNode right;
 	
 	public ExpressionTreeNode(Token theToken)
 	{
-		this(theToken, null, null);	
-		system.
+		this(theToken, null, null);
 	}
 	
 	public ExpressionTreeNode(Token theToken,ExpressionTreeNode lt, ExpressionTreeNode rt){
-		token=theToken 
+		token=theToken;
 		left=lt;
-		Right=rt;
+		right=rt;
 	}
 	
 }
