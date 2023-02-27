@@ -1,9 +1,9 @@
-package Model.Spreadsheet;
+package Spreadsheet;
 
 import java.util.Stack;
 
-import Model.Cell.Tokens.CellToken;
-import Model.Cell.Tokens.Token;
+import Cell.Tokens.CellToken;
+import Cell.Tokens.Token;
 
 public class Spreadsheet {
 	//two dimensional array of cells
@@ -12,39 +12,49 @@ public class Spreadsheet {
 	
 	
   public Spreadsheet(int dimentions) {
+<<<<<<< HEAD
 	  cell= new cell[dimentions][dimentions];
+=======
+    //TODO(Write Constructor) 
+>>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
   }
 
   public void printValues() {
+<<<<<<< HEAD
 	  
     throw new UnsupportedOperationException("Not supported yet.");
+=======
+    //TODO(Write Method)
+>>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
   }
   
   public void printCellFormula(CellToken cellToken) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
   }
   
   public void printAllFormulas() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
   }
   
   public void changeCellFormula(CellToken cellToken, String formula) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
   }
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
   }
 
   public void changeCellFormulaAndRecalculate(CellToken cellToken, Stack<Token> formula) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
   }
   
   public int getNumRows() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
+    return 0;
   }
   
   public int getNumColumns() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //TODO(Write Method)
+    return 0;
   }
 }

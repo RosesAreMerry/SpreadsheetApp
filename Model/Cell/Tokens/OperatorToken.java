@@ -1,4 +1,4 @@
-package Model.Cell.Tokens;
+package Cell.Tokens;
 
 public class OperatorToken extends Token {
 
@@ -22,6 +22,31 @@ public class OperatorToken extends Token {
 
   public char getOperator() {
     return operator;
+  }
+
+  public int evaluate(int val1, int val2) {
+    int returnVal = 0;
+
+    switch (operator) {
+        case Plus:
+            returnVal = val1 + val2;
+            break;
+        case Minus:
+            returnVal = val1 - val2;
+            break;
+        case Mult:
+            returnVal = val1 * val2;
+            break;
+        case Div:
+            returnVal = val1 / val2;
+            break;
+        default:
+            // This case should NEVER happen
+            System.out.println("Error in OperatorToken.evaluate.");
+            System.exit(0);
+            break;
+    }
+    return returnVal;
   }
 
   /**
