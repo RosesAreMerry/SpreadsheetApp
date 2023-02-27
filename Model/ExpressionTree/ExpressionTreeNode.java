@@ -7,7 +7,8 @@ public class ExpressionTreeNode() {
 	
 	public ExpressionTreeNode(Token theToken)
 	{
-		this(theToken, null, null);		
+		this(theToken, null, null);	
+		system.
 	}
 	
 	public ExpressionTreeNode(Token theToken,ExpressionTreeNode lt, ExpressionTreeNode rt){

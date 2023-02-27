@@ -6,6 +6,7 @@ public class LiteralToken extends Token {
 
   public LiteralToken(int value) {
     this.value = value;
+    
   }
 
   public int getValue() {

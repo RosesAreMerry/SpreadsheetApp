@@ -8,6 +8,7 @@ import Model.Cell.Tokens.OperatorToken;
 import Model.Cell.Tokens.Token;
 
 public class Cell {
+	
   Cell(String row, int column, String formula) {
     setRow(row);
     setColumn(column);

@@ -3,8 +3,8 @@ package Model.Cell.Tokens;
 public class CellToken extends Token {
   public static final int BADCELL = -1;
 
-  private int row;
   private int column;
+  private int row;
 
   public int getRow() {
     return row;

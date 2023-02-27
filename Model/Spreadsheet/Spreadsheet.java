@@ -6,11 +6,17 @@ import Model.Cell.Tokens.CellToken;
 import Model.Cell.Tokens.Token;
 
 public class Spreadsheet {
+	//two dimensional array of cells
+	private Cell[][] cell;
+	private static int dimentions = 8;
+	
+	
   public Spreadsheet(int dimentions) {
-    throw new UnsupportedOperationException("Not supported yet.");
+	  cell= new cell[dimentions][dimentions];
   }
 
   public void printValues() {
+	  
     throw new UnsupportedOperationException("Not supported yet.");
   }
   
