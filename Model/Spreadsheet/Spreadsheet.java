@@ -9,16 +9,21 @@ import Cell.Tokens.Token;
 public class Spreadsheet {
 	//two dimensional array of cells
 	private Cell[][] cell;
-	private static int dimentions = 4;
+	private static int dimensions = 4;
 	
 	
-  public Spreadsheet(int dimentions) {
-	  this.dimentions= dimentions;
-	  cell = new Cell[dimentions][dimentions];
+  public Spreadsheet(int dimensions) {
+	  this.dimensions= dimensions;
+	  cell = new Cell[dimensions][dimensions];
   }
 
-  public void printValues() {
-    
+  public void printValues() {	  
+	  for (int i=0; i<cell.length; i++)
+	  {
+		  for(int j=0;j<cell[0].length;j++){
+			  System.out.println(cell[i][j].getValue()+ " ");
+		  }
+	  }
   }
   
   public void printCellFormula(CellToken cellToken) {
@@ -30,7 +35,8 @@ public class Spreadsheet {
   }
   
   public void changeCellFormula(CellToken cellToken, String formula) {
-    //TODO(Write Method)
+	  
+	  //TODO(Write Method)
   }
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
