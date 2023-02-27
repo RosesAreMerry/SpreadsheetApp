@@ -121,6 +121,8 @@ public class Cell {
     int index = 0;  // index into formula
     Stack<Token> operatorStack = new Stack<Token>();  // stack of operators
 
+    int parenthesesCount = 0; // count of left parentheses (increases priority of operators)
+
     while (index < formula.length() ) {
         // get rid of leading whitespace characters
         while (index < formula.length() ) {
@@ -138,21 +140,23 @@ public class Cell {
 
         // ASSERT: ch now contains the first character of the next token.
         if (OperatorToken.isOperator(ch)) {
+          OperatorToken currentOperator = new OperatorToken(ch);
+          currentOperator.incrementParenPriority(parenthesesCount);
             // We found an operator token
             switch (ch) {
                 case OperatorToken.Plus:
                 case OperatorToken.Minus:
                 case OperatorToken.Mult:
                 case OperatorToken.Div:
-                case OperatorToken.LeftParen:
                     // push operatorTokens onto the output stack until
                     // we reach an operator on the operator stack that has
                     // lower priority than the current one.
                     OperatorToken stackOperator;
                     while (!operatorStack.isEmpty()) {
-                        stackOperator = (OperatorToken) operatorStack.firstElement();
-                        if ( (OperatorToken.priority(stackOperator.getOperator()) >= OperatorToken.priority(ch)) &&
-                            (stackOperator.getOperator() != OperatorToken.LeftParen) ) {
+                        stackOperator = (OperatorToken) operatorStack.peek();
+                        if ((stackOperator.getParenPriority() > currentOperator.getParenPriority()) || (
+                            (stackOperator.getParenPriority() == currentOperator.getParenPriority()) &&
+                            (stackOperator.getPriority() >= currentOperator.getPriority()))) {
 
                             // output the operator to the return stack    
                             operatorStack.pop();
@@ -170,21 +174,22 @@ public class Cell {
                     break;
             }
             // push the operator on the operator stack
-            operatorStack.push(new OperatorToken(ch));
+            operatorStack.push(currentOperator);
 
             index++;
 
-        } else if (ch == ')') {    // maybe define OperatorToken.RightParen ?
-            OperatorToken stackOperator;
-            stackOperator = (OperatorToken) operatorStack.pop();
-            // This code does not handle operatorStack underflow.
-            while (stackOperator.getOperator() != OperatorToken.LeftParen) {
-                // pop operators off the stack until a LeftParen appears and
-                // place the operators on the output stack
-                returnStack.push(stackOperator);
-                stackOperator = (OperatorToken) operatorStack.pop();
+        } else if (ch == '(') {
+            // We found a left parenthesis
+            parenthesesCount++;
+            index++;
+        }
+        else if (ch == ')') {
+            // We found a right parenthesis
+            parenthesesCount--;
+            if (parenthesesCount < 0) {
+                error = true;
+                break;
             }
-
             index++;
         } else if (Character.isDigit(ch)) {
             // We found a literal token
