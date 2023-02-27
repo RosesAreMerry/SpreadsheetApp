@@ -1,45 +1,96 @@
-package Model.Cell;
+package Cell;
 
 import java.util.Stack;
+import java.util.function.Function;
 
-import Model.Cell.Tokens.CellToken;
-import Model.Cell.Tokens.LiteralToken;
-import Model.Cell.Tokens.OperatorToken;
-import Model.Cell.Tokens.Token;
+import Cell.Tokens.CellToken;
+import Cell.Tokens.LiteralToken;
+import Cell.Tokens.OperatorToken;
+import Cell.Tokens.Token;
 
 public class Cell {
-  Cell(String row, int column, String formula) {
+
+  private int row;
+  private int column;
+  private String formula;
+  private Stack<Token> postfixFormula;
+  private Function<CellToken, Integer> getCellValue;
+  private int value;
+
+  public Cell(int row, int column, String formula, Function<CellToken, Integer> getCellValue) {
     setRow(row);
     setColumn(column);
     setFormula(formula);
+    this.getCellValue = getCellValue;
+    recalculate();
   }
 
   public int getRow() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return row;
   }
 
   public int getColumn() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return column;
   }
   
-  public void setRow(String row) {
-    throw new UnsupportedOperationException("Not supported yet.");
+  public void setRow(int row) {
+    this.row = row;
   }
   
   public void setColumn(int column) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    this.column = column;
   }
   
   public void setFormula(String formula) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    this.formula = formula;
+    postfixFormula = getFormula(formula);
   }
   
   public String getFormula() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return formula;
   }
   
   public int getValue() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return value;
+  }
+
+  public void recalculate() {
+    Integer val1 = null;
+    Integer val2 = null;
+    int result = 0;
+
+    while (!postfixFormula.isEmpty()) {
+      Token token = postfixFormula.pop();
+      Integer value = null;
+      if (token instanceof LiteralToken) {
+        value = ((LiteralToken) token).getValue();
+      } else if (token instanceof CellToken) {
+        value = getCellValue.apply((CellToken) token);
+      } else if (token instanceof OperatorToken) {
+        if (val1 != null && val2 != null) {
+          value = ((OperatorToken) token).evaluate(val1, val2);
+          postfixFormula.push(new LiteralToken(value));
+          val1 = null;
+          val2 = null;
+        } else if (val1 != null) {
+          val2 = ((OperatorToken) token).evaluate(val1, 0);
+        } else {
+          val1 = ((OperatorToken) token).evaluate(0, 0);
+        }
+        continue;
+      }
+      if (value != null) {
+        if (val1 == null) {
+          val1 = value;
+        } else if (val2 == null) {
+          val2 = value;
+        }
+      }
+      if (postfixFormula.size() == 0) {
+        result = value;
+      }
+    }
+    value = result;
   }
 
   /**
@@ -180,8 +231,16 @@ public class Cell {
         // a parse error; return the empty stack
         returnStack.clear();
     }
+    Stack<Token> temp = new Stack<Token>();
+   
+    while (returnStack.empty() == false)
+    {
+      temp.push(returnStack.peek());
+      returnStack.pop();
+    }  
+   
 
-    return returnStack;
+    return temp;
   }
   
 }

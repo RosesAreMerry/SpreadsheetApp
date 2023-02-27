@@ -1,4 +1,4 @@
-package Model.Cell.Tokens ;
+package Cell.Tokens;
 
 public class CellToken extends Token {
   public static final int BADCELL = -1;
