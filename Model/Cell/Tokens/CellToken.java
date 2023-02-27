@@ -96,6 +96,7 @@ public class CellToken extends Token {
     int index = startIndex;
 
     // handle a bad startIndex
+    // handle  a bad startIndex
     if ((startIndex < 0) || (startIndex >= inputString.length() )) {
         cellToken.setColumn(CellToken.BADCELL);
         cellToken.setRow(CellToken.BADCELL);
@@ -117,6 +118,7 @@ public class CellToken extends Token {
         return index;
     }
 
+    // ASSERT: index now points to the first non-whitespace character
     // ASSERT: index now points to the first non-whitespace character
 
     ch = inputString.charAt(index);            
@@ -140,7 +142,7 @@ public class CellToken extends Token {
         }
     }
     if (index == inputString.length() ) {
-        // reached the end of the string before fully parsing the cell reference
+        // reached the end of the string before fully parsing the cell the reference
         cellToken.setColumn(CellToken.BADCELL);
         cellToken.setRow(CellToken.BADCELL);
         return index;
