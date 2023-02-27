@@ -54,6 +54,16 @@ public class Cell {
     return value;
   }
 
+  public CellToken[] getDependencies() {
+    Stack<CellToken> dependencies = new Stack<CellToken>();
+    for (Token token : postfixFormula) {
+      if (token instanceof CellToken) {
+        dependencies.push((CellToken) token);
+      }
+    }
+    return dependencies.toArray(new CellToken[dependencies.size()]);
+  }
+
   public void recalculate() {
     Stack<Integer> currentValues = new Stack<Integer>();
     int result = 0;
@@ -71,8 +81,11 @@ public class Cell {
           postfixFormula.push(new LiteralToken(value));
         }
       }
-      if(postfixFormula.size() == 1 && postfixFormula.peek() instanceof LiteralToken) {
+      if (postfixFormula.size() == 1 && postfixFormula.peek() instanceof LiteralToken) {
         result = ((LiteralToken) postfixFormula.pop()).getValue();
+      }
+      if (postfixFormula.isEmpty() && currentValues.size() == 1) {
+        result = currentValues.pop();
       }
     }
     this.value = result;
