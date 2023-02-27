@@ -40,6 +40,8 @@ public class OperatorToken extends Token {
         case Div:
             returnVal = val1 / val2;
             break;
+        case LeftParen:
+            
         default:
             // This case should NEVER happen
             System.out.println("Error in OperatorToken.evaluate.");
