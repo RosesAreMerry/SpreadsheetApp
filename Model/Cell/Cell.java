@@ -9,10 +9,6 @@ import Cell.Tokens.OperatorToken;
 import Cell.Tokens.Token;
 
 public class Cell {
-<<<<<<< HEAD
-	
-  Cell(String row, int column, String formula) {
-=======
 
   private int row;
   private int column;
@@ -22,7 +18,6 @@ public class Cell {
   private int value;
 
   public Cell(int row, int column, String formula, Function<CellToken, Integer> getCellValue) {
->>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
     setRow(row);
     setColumn(column);
     setFormula(formula);
