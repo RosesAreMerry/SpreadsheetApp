@@ -11,6 +11,9 @@ public class Spreadsheet {
 	private Cell[][] cell;
 	private static int dimensions = 4;
 	
+	int numrows;
+	int nucolumns;
+	
 	
   public Spreadsheet(int dimensions) {
 	  this.dimensions= dimensions;
@@ -27,20 +30,30 @@ public class Spreadsheet {
   }
   
   public void printCellFormula(CellToken cellToken) {
-    //TODO(Write Method)
-  }
-  
-  public void printAllFormulas() {
-    //TODO(Write Method)
+	int row=cellToken.getRow(); //get the row.  
+	int column=cellToken.getColumn(); //get the column.
+	String theformula=cell[row][column].getFormula(); //get theformula in that specific row and column. 
+	
+	System.out.print(theformula);
+	
+  }  
+  public void printAllFormulas(){
+	  for(int i=0;i<this.getNumRows();i++) {
+		  for(int j=0;j<this.getNumColumns();j++) {
+			  String theformula=cell[i][j].getFormula();
+			  System.out.println(theformula);
+		  }
+	  }    
   }
   
   public void changeCellFormula(CellToken cellToken, String formula) {
-	  
-	  //TODO(Write Method)
+	  int row=cellToken.getRow(); //get the row.  
+	  int column=cellToken.getColumn(); //get the column.
+	  cell[row][column].setFormula(formula);
   }
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
-    //TODO(Write Method)
+   
   }
 
   public void changeCellFormulaAndRecalculate(CellToken cellToken, Stack<Token> formula) {
@@ -48,12 +61,12 @@ public class Spreadsheet {
   }
   
   public int getNumRows() {
-    //TODO(Write Method)
-    return 0;
+    
+    return cell.length;
   }
   
   public int getNumColumns() {
-    //TODO(Write Method)
-    return 0;
+    
+    return cell[0].length;
   }
 }
