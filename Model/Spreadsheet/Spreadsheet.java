@@ -35,11 +35,16 @@ public class Spreadsheet {
    *  prints the formula of a single cell
    */
   public void printCellFormula(CellToken cellToken) {
+	  String theformula;
 	int row=cellToken.getRow(); //get the row.  
 	int column=cellToken.getColumn(); //get the column.
-	String theformula=cell[row][column].getFormula(); //get theformula in that specific row and column. 
+	if(cell[row][column]!= null) {
+		theformula=cell[row][column].getFormula(); //get theformula in that specific row and column.
+	}
+	theformula="0";
 	
-	System.out.println(theformula);
+	
+	System.out.println( "the formula you entered " + theformula);
 	
   }  
   /**
@@ -63,7 +68,10 @@ public class Spreadsheet {
   public void changeCellFormula(CellToken cellToken, String formula) {
 	  int row=cellToken.getRow(); //get the row.  
 	  int column=cellToken.getColumn(); //get the column.
+	    
+	  
 	  cell[row][column].setFormula(formula);
+	  System.out.println(cell[row][column].getFormula());
   }
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
