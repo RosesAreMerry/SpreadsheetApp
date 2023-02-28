@@ -100,7 +100,7 @@ public class SpreadsheetApp {
         System.out.println("Enter the cell's new formula: ");
         inputFormula = readString();
         expTreeTokenStack = Cell.getFormula(inputFormula);
-    
+        
         /*
         // This code prints out the expression stack from
         // top to bottom (that is, reverse of postfix).
