@@ -11,8 +11,7 @@ public class Spreadsheet {
 	private Cell[][] cell;
 	private static int dimensions = 4;
 	
-	int numrows;
-	int nucolumns;
+	
 	
 	
   public Spreadsheet(int dimensions) {
@@ -34,7 +33,7 @@ public class Spreadsheet {
 	int column=cellToken.getColumn(); //get the column.
 	String theformula=cell[row][column].getFormula(); //get theformula in that specific row and column. 
 	
-	System.out.print(theformula);
+	System.out.println(theformula);
 	
   }  
   public void printAllFormulas(){
