@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import Cell.Cell;
 import Cell.Tokens.CellToken;
+import Spreadsheet.Spreadsheet;
 
 class SpreadsheetTest {
 	Function<CellToken, Integer> getCellToken = (cell) -> {
