@@ -1,47 +1,65 @@
-package Model.Spreadsheet;
+package Spreadsheet;
 
-import Spreadsheet.Spreadsheet;
-import Cell.Cell;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.function.Function;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import Cell.Cell;
+import Cell.Tokens.CellToken;
+
 class SpreadsheetTest {
-    Spreadsheet spreadsheet = new Spreadsheet(4);
-    Cell myCell = new Cell(0, 0, 0, 0);
+	Function<CellToken, Integer> getCellToken = (cell) -> {
+        return 2;
+};      
+	int row=2;
+	int column=2;
+	String Formula= "5+3";
+	Spreadsheet spreadsheet = new Spreadsheet(4);
+    Cell cell= new Cell(row,column, Formula,getCellToken);
+    CellToken celltoken= new CellToken();
+          
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+	}
 
-    @org.junit.jupiter.api.BeforeEach
-    void setUp() {
-    }
+	@BeforeEach
+	void setUp() throws Exception {
+	}
 
-    @org.junit.jupiter.api.Test
-    void printValues() {
+	@Test
+	void testPrintValues() {
+		fail("Not yet implemented");
+	}
 
-    }
+	@Test
+	void testPrintCellFormula() {
+		fail("Not yet implemented");
+	}
 
-    @org.junit.jupiter.api.Test
-    void printCellFormula() {
-    }
+	@Test
+	void testPrintAllFormulas() {
+		fail("Not yet implemented");
+	}
 
-    @org.junit.jupiter.api.Test
-    void printAllFormulas() {
-    }
+	@Test
+	void testChangeCellFormula() {
+		String s = "5+3";
+		spreadsheet.changeCellFormula(celltoken, s);
+		assertequals(s,  cell.getFormula());
+	}
 
-    @org.junit.jupiter.api.Test
-    void changeCellFormula() {
-    }
+	@Test
+	void testGetNumRows() {
+		fail("Not yet implemented");
+	}
 
-    @org.junit.jupiter.api.Test
-    void changeCellFormulaAndRecalculate() {
-    }
+	@Test
+	void testGetNumColumns() {
+		fail("Not yet implemented");
+	}
 
-    @org.junit.jupiter.api.Test
-    void testChangeCellFormulaAndRecalculate() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void getNumRows() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void getNumColumns() {
-    }
 }
