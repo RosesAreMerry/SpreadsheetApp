@@ -2,12 +2,26 @@ package Spreadsheet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.function.Function;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class SpreadsheetTest {
+import Cell.Cell;
+import Cell.Tokens.CellToken;
 
+class SpreadsheetTest {
+	Function<CellToken, Integer> getCellToken = (cell) -> {
+        return 2;
+};      
+	int row=2;
+	int column=2;
+	String Formula= "5+3";
+	Spreadsheet spreadsheet = new Spreadsheet(4);
+    Cell cell= new Cell(row,column, Formula,getCellToken);
+    CellToken celltoken= new CellToken();
+          
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}
@@ -33,7 +47,9 @@ class SpreadsheetTest {
 
 	@Test
 	void testChangeCellFormula() {
-		fail("Not yet implemented");
+		String s = "5+3";
+		spreadsheet.changeCellFormula(celltoken, s);
+		assertequals(s,  cell.getFormula());
 	}
 
 	@Test
