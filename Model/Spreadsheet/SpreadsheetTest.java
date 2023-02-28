@@ -49,7 +49,7 @@ class SpreadsheetTest {
 	void testChangeCellFormula() {
 		String s = "5+3";
 		spreadsheet.changeCellFormula(celltoken, s);
-		assertequals(s,  cell.getFormula());
+		assertEquals(s,  cell.getFormula());
 	}
 
 	@Test
