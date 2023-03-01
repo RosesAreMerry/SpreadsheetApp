@@ -44,7 +44,7 @@ public class Spreadsheet {
 	theformula="0";
 	
 	
-	System.out.println( "the formula you entered " + theformula);
+	
 	
   }  
   /**
@@ -68,8 +68,6 @@ public class Spreadsheet {
   public void changeCellFormula(CellToken cellToken, String formula) {
 	  int row=cellToken.getRow(); //get the row.  
 	  int column=cellToken.getColumn(); //get the column.
-	    
-	  
 	  cell[row][column].setFormula(formula);
 	  System.out.println(cell[row][column].getFormula());
   }

@@ -100,6 +100,7 @@ public class SpreadsheetApp {
         System.out.println("Enter the cell's new formula: ");
         inputFormula = readString();
         expTreeTokenStack = Cell.getFormula(inputFormula);
+        System.out.println( "the formula you enetered : "+inputFormula);
         
         /*
         // This code prints out the expression stack from
