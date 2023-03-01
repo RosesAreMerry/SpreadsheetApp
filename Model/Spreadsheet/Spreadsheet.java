@@ -14,7 +14,7 @@ public class Spreadsheet {
 	
 	
 /**
- *  constructor	
+ *  constructor	initializes the spreadsheet
  */
   public Spreadsheet(int dimensions) {
 	  Spreadsheet.dimensions= dimensions;
