@@ -1,4 +1,4 @@
-package Model.Spreadsheet;
+package Spreadsheet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
