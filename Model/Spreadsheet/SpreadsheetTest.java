@@ -1,4 +1,4 @@
-package Spreadsheet;
+package Model.Spreadsheet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,29 +10,22 @@ import org.junit.jupiter.api.Test;
 
 import Cell.Cell;
 import Cell.Tokens.CellToken;
+import Spreadsheet.Spreadsheet;
 
 class SpreadsheetTest {
 	Function<CellToken, Integer> getCellToken = (cell) -> {
         return 2;
-};      
-	int row=2;
-	int column=2;
+};
+	int row=4;
+	int column=4;
 	String Formula= "5+3";
 	Spreadsheet spreadsheet = new Spreadsheet(4);
     Cell cell= new Cell(row,column, Formula,getCellToken);
     CellToken celltoken= new CellToken();
-          
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
 
 	@Test
 	void testPrintValues() {
-		fail("Not yet implemented");
+		spreadsheet.printValues();
 	}
 
 	@Test

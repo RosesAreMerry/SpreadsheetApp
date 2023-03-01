@@ -66,10 +66,21 @@ public class Spreadsheet {
    */
   
   public void changeCellFormula(CellToken cellToken, String formula) {
+	  String noFormula= "0";
 	  int row=cellToken.getRow(); //get the row.  
 	  int column=cellToken.getColumn(); //get the column.
+<<<<<<< HEAD
 	  cell[row][column].setFormula(formula);
 	  System.out.println(cell[row][column].getFormula());
+=======
+	  if (cell[row][column]!= null) {
+		  cell[row][column].setFormula(formula);
+	  }
+	  else {
+		  System.out.println(noFormula);
+	  }
+
+>>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
   }
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
