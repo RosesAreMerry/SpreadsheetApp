@@ -16,8 +16,8 @@ class SpreadsheetTest {
 	Function<CellToken, Integer> getCellToken = (cell) -> {
         return 2;
 };
-	int row=2;
-	int column=2;
+	int row=4;
+	int column=4;
 	String Formula= "5+3";
 	Spreadsheet spreadsheet = new Spreadsheet(4);
     Cell cell= new Cell(row,column, Formula,getCellToken);
@@ -25,7 +25,7 @@ class SpreadsheetTest {
 
 	@Test
 	void testPrintValues() {
-		fail("Not yet implemented");
+		spreadsheet.printValues();
 	}
 
 	@Test
