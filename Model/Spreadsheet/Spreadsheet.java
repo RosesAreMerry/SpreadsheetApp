@@ -73,7 +73,9 @@ public class Spreadsheet {
 			  System.out.println(theformula);
 			  }
 			  else {
+
 				  System.out.println("0");
+
 	}
  }
 		  		 
