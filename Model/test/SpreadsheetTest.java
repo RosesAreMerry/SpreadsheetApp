@@ -96,14 +96,14 @@ class SpreadsheetTest {
 		testSpreadsheet.changeCellFormula(theTestCellToken2, "1+A0");
 		testSpreadsheet.changeCellFormula(theTestCellToken3, "B0-11");
 
-	//	ByteArrayOutputStream output = new ByteArrayOutputStream();
-		//System.setOut(new PrintStream(output));
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+	//	System.setOut(new PrintStream(output));
 
 		testSpreadsheet.printAllFormulas();
 
-		//String expectedOutput = "3+1A1+1A2-11";
+	//	String expectedOutput = "3+11+A0B0-110";
 
-		//assertEquals(expectedOutput, output.toString().replace("\r\n", ""));
+	//	assertEquals(expectedOutput, output.toString().replace("\r\n", ""));
 	}
 
 	@Test

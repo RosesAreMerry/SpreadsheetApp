@@ -73,6 +73,7 @@ public class Spreadsheet {
 			  System.out.println(theformula);
 			  }
 			  else {
+				  theformula="0";
 				  System.out.println(theformula);
 	}
  }
