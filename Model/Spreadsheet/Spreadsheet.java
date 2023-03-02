@@ -10,7 +10,7 @@ import Cell.Tokens.Token;
 public class Spreadsheet {
 	//two dimensional array of cells
 	private Cell[][] cell;
-	private static int dimensions = 4;
+	private static int dimensions;;
 	private Function<CellToken, Integer> lookupCell = (c) -> {
 		return cell[c.getRow()][c.getColumn()].getValue();
 		};
@@ -23,6 +23,7 @@ public class Spreadsheet {
   public Spreadsheet(int dimensions) {
 	  Spreadsheet.dimensions= dimensions;
 	  cell = new Cell[dimensions][dimensions];
+	  
   }
  /**
   *  prints the values of the cell
@@ -65,15 +66,17 @@ public class Spreadsheet {
    */
   public void printAllFormulas(){	  
 	  for(int i=0;i<this.getNumRows();i++) {
-		  String theformula="0";
+		  String theformula= "0";
 		  for(int j=0;j<this.getNumColumns();j++) {
 			  if(cell[i][j]!=null) {
 			  theformula=cell[i][j].getFormula();
+			  System.out.println(theformula);
 			  }
 			  else {
 				  System.out.println(theformula);
-			  }
-		  }
+	}
+ }
+		  
 		 
 	  }    
   }
@@ -103,7 +106,7 @@ public class Spreadsheet {
 	  int cellrow= cellToken.getRow();
 	  int cellcoulumn= cellToken.getColumn();
 	  
-   
+     
   }
 
   public void changeCellFormulaAndRecalculate(CellToken cellToken, Stack<Token> formula) {
