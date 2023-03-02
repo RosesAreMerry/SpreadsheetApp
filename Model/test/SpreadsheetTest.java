@@ -93,8 +93,8 @@ class SpreadsheetTest {
 	@Test
 	void testPrintAllFormulas() {
 		testSpreadsheet.changeCellFormula(theTestCellToken1, "3+1");
-		testSpreadsheet.changeCellFormula(theTestCellToken2, "1+1");
-		testSpreadsheet.changeCellFormula(theTestCellToken3, "2-11");
+		testSpreadsheet.changeCellFormula(theTestCellToken2, "1+A0");
+		testSpreadsheet.changeCellFormula(theTestCellToken3, "B0-11");
 
 	//	ByteArrayOutputStream output = new ByteArrayOutputStream();
 		//System.setOut(new PrintStream(output));
