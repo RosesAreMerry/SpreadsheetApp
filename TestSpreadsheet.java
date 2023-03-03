@@ -35,8 +35,8 @@
 	    spreadsheet.changeCellFormula(celltoken1, "5+5");
 	    spreadsheet.changeCellFormula(celltoken, "5+4");
 	    spreadsheet.changeCellFormula(celltoken2,  "(3+B1)/A0");
-	    spreadsheet.changeCellFormula(celltoken,  "(3+A0)/A0");
-	    spreadsheet.printValues();
+	    spreadsheet.changeCellFormula(celltoken,  "B0+B1");
+	    spreadsheet.printAllFormulas();
 	    
 	    
 //	    Cell cell = new Cell(1, 1, "5*(5-1*5/2)*3", getCellToken);

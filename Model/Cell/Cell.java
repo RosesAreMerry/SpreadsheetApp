@@ -14,7 +14,7 @@ public class Cell {
   private int column;
   private String formula;
   private Stack<Token> postfixFormula;
-  private Function<CellToken, Integer> getCellValue;
+  private final Function<CellToken, Integer> getCellValue;
   private int value;
 
   public Cell(int row, int column, String formula, Function<CellToken, Integer> getCellValue) {
