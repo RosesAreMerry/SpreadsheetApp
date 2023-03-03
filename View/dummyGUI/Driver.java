@@ -2,7 +2,7 @@
  * TCSS 305 - Assignment 4
  */
 
-package experimentalGUI;
+package dummyGUI;
 
 import java.awt.EventQueue;
 
