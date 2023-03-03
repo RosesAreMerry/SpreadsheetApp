@@ -29,17 +29,24 @@ public class Spreadsheet {
   *  prints the values of the cell
   */
   public void printValues() {
+	  CellToken celltoken= new CellToken();
+	  String token = null;
 	  int value=0;
 	  for (int i=0; i<cell.length; i++)
 	  {
 		  for(int j=0;j<cell[0].length;j++){
 			  if(cell[i][j]!=null) {
+			  
+			  celltoken.setColumn(j);
+			  celltoken.setRow(i);
+			  token=celltoken.printCellToken();
 			  value=cell[i][j].getValue();
+			  
 			  }
 			  else {
 				  value=0;
 			  }
-			  System.out.println(value);
+			  System.out.println(token+ ": "+ value);
 		  }
 	  }
   }
@@ -106,8 +113,10 @@ public class Spreadsheet {
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
 	  int cellrow= cellToken.getRow();
 	  int cellcoulumn= cellToken.getColumn();
+	  changeCellFormula( cellToken, formula);
 	  
-     
+	  
+	  //CellToken[] d= cell[cellrow][cellcoulumn].getDependencies();
   }
 
   public void changeCellFormulaAndRecalculate(CellToken cellToken, Stack<Token> formula) {

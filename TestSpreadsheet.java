@@ -26,7 +26,7 @@
 	     CellToken celltoken2=new CellToken();
 	     celltoken2.setRow(0);
 	     celltoken2.setColumn(1);
-	    
+	     
 	    
 	   
 	    
@@ -34,9 +34,11 @@
 	    Spreadsheet spreadsheet= new Spreadsheet(2);
 	    spreadsheet.changeCellFormula(celltoken1, "5+5");
 	    spreadsheet.changeCellFormula(celltoken, "5+4");
-	    spreadsheet.changeCellFormula(celltoken2,  "(3+B1)/A0");
+	    spreadsheet.changeCellFormula(celltoken2,  "(B1)/A0");
 	    spreadsheet.changeCellFormula(celltoken,  "B0+B1");
-	    spreadsheet.printAllFormulas();
+	    
+	    spreadsheet.printValues();
+	    //spreadsheet.printCellFormula(celltoken2);
 	    
 	    
 //	    Cell cell = new Cell(1, 1, "5*(5-1*5/2)*3", getCellToken);
