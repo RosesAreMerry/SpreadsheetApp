@@ -30,7 +30,7 @@ public class Spreadsheet {
   */
   public void printValues() {
 	  CellToken celltoken= new CellToken();
-	  String token = null;
+	  String token= null;
 	  int value=0;
 	  for (int i=0; i<cell.length; i++)
 	  {
@@ -39,14 +39,19 @@ public class Spreadsheet {
 			  
 			  celltoken.setColumn(j);
 			  celltoken.setRow(i);
-			  token=celltoken.printCellToken();
+			   token=celltoken.printCellToken();
+			  //System.out.print(token);
 			  value=cell[i][j].getValue();
 			  
 			  }
 			  else {
+				  celltoken.setColumn(j);
+				  celltoken.setRow(i);
+				  token=celltoken.printCellToken();
 				  value=0;
 			  }
-			  System.out.println(token+ ": "+ value);
+			  
+			  System.out.println( token+ ": "+ value);
 		  }
 	  }
   }
@@ -54,16 +59,24 @@ public class Spreadsheet {
    *  prints the formula of a single cell
    */
   public void printCellFormula(CellToken cellToken) {
+	 CellToken celltoken= new CellToken();
+	 String token =null;
 	String theformula;
 	int row=cellToken.getRow(); //get the row.  
 	int column=cellToken.getColumn(); //get the column.
 	if(cell[row][column]!= null) {
-	   theformula=cell[row][column].getFormula(); //get theformula in that specific row and column.
-		System.out.println(theformula);
+		   celltoken.setColumn(column);
+		   celltoken.setRow(row);
+		   token=celltoken.printCellToken();
+	       theformula=cell[row][column].getFormula(); //get theformula in that specific row and column.
+		System.out.println(token + ": "+ theformula);
 	}
 	else {
-	theformula="0";
-	System.out.println(theformula);
+		celltoken.setColumn(column);
+		celltoken.setRow(row);
+		token=celltoken.printCellToken();
+		theformula="0";
+		System.out.println(token + theformula);
 	}
 	
 	
@@ -71,17 +84,24 @@ public class Spreadsheet {
   /**
    *  print formulas of all the cells in the spreadsheet 
    */
-  public void printAllFormulas(){	  
+  public void printAllFormulas(){
+	  String token= null;
+	  CellToken celltoken= new CellToken();
 	  for(int i=0;i<this.getNumRows();i++) {
 		  String theformula= "0";
 		  for(int j=0;j<this.getNumColumns();j++) {
 			  if(cell[i][j]!=null) {
-			  theformula=cell[i][j].getFormula();
-			  System.out.println(theformula);
+			   celltoken.setColumn(j);
+			   celltoken.setRow(i);
+			   token=celltoken.printCellToken();
+			   theformula=cell[i][j].getFormula();
+			   System.out.println(token + ": "+theformula);
 			  }
 			  else {
-
-				  System.out.println("0");
+				  celltoken.setColumn(j);
+				  celltoken.setRow(i);
+				  token=celltoken.printCellToken();
+				  System.out.println(token + ":"+ "0");
 
 	}
  }
@@ -106,6 +126,7 @@ public class Spreadsheet {
 	  else {		  
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
 		 cell[row][column]=newCell;
+		
 		 
 	  }
   }
@@ -114,8 +135,9 @@ public class Spreadsheet {
 	  int cellrow= cellToken.getRow();
 	  int cellcoulumn= cellToken.getColumn();
 	  changeCellFormula( cellToken, formula);
-	  
-	  
+	  cell[cellrow][cellcoulumn].recalculate();
+	  int value= cell[cellrow][cellcoulumn].getValue();
+	  System.out.println(value);
 	  //CellToken[] d= cell[cellrow][cellcoulumn].getDependencies();
   }
 
