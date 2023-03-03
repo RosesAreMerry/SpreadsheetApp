@@ -96,6 +96,7 @@ public class Spreadsheet {
 	  else {		  
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
 		 cell[row][column]=newCell;
+		
 		 
 	  }
   }
@@ -104,8 +105,9 @@ public class Spreadsheet {
 	  int cellrow= cellToken.getRow();
 	  int cellcoulumn= cellToken.getColumn();
 	  changeCellFormula( cellToken, formula);
-	  
-	  
+	  cell[cellrow][cellcoulumn].recalculate();
+	  int value= cell[cellrow][cellcoulumn].getValue();
+	  System.out.println(value);
 	  //CellToken[] d= cell[cellrow][cellcoulumn].getDependencies();
   }
 
