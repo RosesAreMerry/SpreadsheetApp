@@ -2,7 +2,7 @@ package Cell;
 
 import java.util.Stack;
 import java.util.function.Function;
-import java.util.stream.Collector;
+//import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +14,7 @@ import Cell.Tokens.CellToken;
 import Cell.Tokens.LiteralToken;
 import Cell.Tokens.OperatorToken;
 import Cell.Tokens.Token;
+
 
 public class Cell {
 
@@ -31,10 +32,6 @@ public class Cell {
     this.getCellValue = getCellValue;
     recalculate();
   }
-
-  public static Cell testCell = new Cell(0, 0, "5*(5-1*5/2)*3", (cell) -> {
-    return null;
-  });
 
   public int getRow() {
     return row;
@@ -71,11 +68,20 @@ public class Cell {
    * @return ArrayList<Cell> list of all dependencies in the order they need to be calculated
    */
   public ArrayList<Cell> getDependencies() {
-    return new ArrayList<Cell>(postfixFormula.stream()
-        .filter(token -> token instanceof CellToken)
-        .map(token -> getCellValue.apply((CellToken) token))
-        .collect(Collectors.toList()));
-  }
+	  List<Cell> dependencies = new ArrayList<>();
+	    for (Token token : postfixFormula) {
+	        if (token instanceof CellToken) {
+	            dependencies.add(getCellValue.apply((CellToken) token));
+	        }
+	    }
+	    return (ArrayList<Cell>) dependencies;
+	}
+  
+//  public List<Cell> getDependencies() {
+//    return postfixFormula.stream().filter(token -> token instanceof CellToken)
+//    		.map(token -> getCellValue.apply((CellToken) token))
+//    		.collect(Collectors.toList());
+//  }
 
   public void recalculate() {
     Stack<Integer> currentValues = new Stack<Integer>();

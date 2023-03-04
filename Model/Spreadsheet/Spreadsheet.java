@@ -29,7 +29,6 @@ public class Spreadsheet {
   *  prints the values of the cell
   */
   public void printValues() {
-
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
@@ -103,7 +102,7 @@ public class Spreadsheet {
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
 	  changeCellFormula(cellToken, formula);
-		recalculateAll();
+	  recalculateAll();
   }
 
 	/**
