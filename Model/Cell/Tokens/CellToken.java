@@ -173,8 +173,14 @@ public class CellToken extends Token {
 
     // successfully parsed a cell reference
     cellToken.setColumn(column);
-    cellToken.setRow(row);
+    cellToken.setRow(row-1 /* convert to zero-based */);
     return index;
-  }
+    }
+
+    public static CellToken getCellToken(String inputString) {
+        CellToken cellToken = new CellToken();
+        getCellToken(inputString, 0, cellToken);
+        return cellToken;
+    }
 
 }

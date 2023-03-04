@@ -12,8 +12,8 @@ public class Spreadsheet {
 	//two dimensional array of cells
 	private Cell[][] cell;
 	private static int dimensions;;
-	private Function<CellToken, Integer> lookupCell = (c) -> {
-		return cell[c.getRow()][c.getColumn()].getValue();
+	private Function<CellToken, Cell> lookupCell = (c) -> {
+		return cell[c.getRow()][c.getColumn()];
 		};
 	
 	
@@ -30,84 +30,57 @@ public class Spreadsheet {
   *  prints the values of the cell
   */
   public void printValues() {
-	  CellToken celltoken= new CellToken();
-	  String token= null;
-	  int value=0;
-	  for (int i=0; i<cell.length; i++)
-	  {
-		  for(int j=0;j<cell[0].length;j++){
-			  if(cell[i][j]!=null) {			  
-			   celltoken.setColumn(j);
-			   celltoken.setRow(i);
-			   token=celltoken.printCellToken();
-			  //System.out.print(token);
-			  value=cell[i][j].getValue();
-			  
-			  }
-			  else {
-				  celltoken.setColumn(j);
-				  celltoken.setRow(i);
-				  token=celltoken.printCellToken();
-				  value=0;
-			  }
-			  
-			  System.out.println( token+ ": "+ value);
-		  }
-	  }
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < dimensions; i++) {
+			for (int j = 0; j < dimensions; j++) {
+				char row = (char) (i % 26 + 65);
+				if (cell[i][j] != null) {
+					sb.append(row).append(j + 1).append(":").append(cell[i][j].getValue()).append(" ");
+				} else {
+					sb.append(row).append(j + 1).append(":0 ");
+				}
+			}
+			sb.append("\n");
+		}
+		System.out.println(sb.toString());
+
   }
   /**
    *  prints the formula of a single cell
    */
   public void printCellFormula(CellToken cellToken) {
-	 CellToken celltoken= new CellToken();
-	 String token =null;
-	String theformula;
-	int row=cellToken.getRow(); //get the row.  
-	int column=cellToken.getColumn(); //get the column.
-	if(cell[row][column]!= null) {
-		   celltoken.setColumn(column);
-		   celltoken.setRow(row);
-		   token=celltoken.printCellToken();
-	       theformula=cell[row][column].getFormula(); //get theformula in that specific row and column.
-		System.out.println(token + ": "+ theformula);
+		String theFormula;
+		int row = cellToken.getRow(); //get the row.  
+		int column = cellToken.getColumn(); //get the column.
+		if(cell[row][column] != null) {
+			theFormula = cell[row][column].getFormula(); //get the formula in that specific row and column.
+		}
+		else {
+			theFormula = "";
+		}
+		System.out.println(theFormula);
 	}
-	else {
-		celltoken.setColumn(column);
-		celltoken.setRow(row);
-		token=celltoken.printCellToken();
-		theformula="0";
-		System.out.println(token + theformula);
-	}
-	
-	
-  }  
+
+
   /**
    *  print formulas of all the cells in the spreadsheet 
    */
-  public void printAllFormulas(){
-	  String token= null;
-	  CellToken celltoken= new CellToken();
-	  for(int i=0;i<this.getNumRows();i++) {
-		  String theformula= "0";
-		  for(int j=0;j<this.getNumColumns();j++) {
-			  if(cell[i][j]!=null) {
-			   celltoken.setColumn(j);
-			   celltoken.setRow(i);
-			   token=celltoken.printCellToken();
-			   theformula=cell[i][j].getFormula();
-			   System.out.println(token + ": "+theformula);
-			  }
-			  else {
-				  celltoken.setColumn(j);
-				  celltoken.setRow(i);
-				  token=celltoken.printCellToken();
-				  System.out.println(token + ":"+ "0");
-
+  public void printAllFormulas(){	  
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < dimensions; i++) {
+			for (int j = 0; j < dimensions; j++) {
+				char row = (char) (i % 26 + 65);
+				if (cell[i][j] != null) {
+					sb.append(row).append(j + 1).append(":").append(cell[i][j].getFormula()).append(" ");
+				} else {
+					sb.append(row).append(j + 1).append(":0 ");
+				}
+			}
+			sb.append("\n");
+		}
+		System.out.println(sb.toString());
 	}
- }
-		  		 
-	  }    
-  }
   
   /**
    * changes the cellformula to a new formula 
