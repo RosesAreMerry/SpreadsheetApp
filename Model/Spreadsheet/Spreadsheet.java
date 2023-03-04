@@ -1,5 +1,6 @@
 package Spreadsheet;
 
+import java.util.LinkedList;
 import java.util.Stack;
 import java.util.function.Function;
 
@@ -35,10 +36,9 @@ public class Spreadsheet {
 	  for (int i=0; i<cell.length; i++)
 	  {
 		  for(int j=0;j<cell[0].length;j++){
-			  if(cell[i][j]!=null) {
-			  
-			  celltoken.setColumn(j);
-			  celltoken.setRow(i);
+			  if(cell[i][j]!=null) {			  
+			   celltoken.setColumn(j);
+			   celltoken.setRow(i);
 			   token=celltoken.printCellToken();
 			  //System.out.print(token);
 			  value=cell[i][j].getValue();
@@ -125,9 +125,7 @@ public class Spreadsheet {
 	  }
 	  else {		  
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
-		 cell[row][column]=newCell;
-		
-		 
+		 cell[row][column]=newCell;		 
 	  }
   }
   
@@ -135,7 +133,10 @@ public class Spreadsheet {
 	  changeCellFormula(cellToken, formula);
 	  int row= cellToken.getRow();
 	  int column= cellToken.getColumn();
-	  CellToken[] fomulatokens= cell[row][column].getDependencies();
+	  //CellToken[] fomulatokens= cell[row][column].getDependencies();
+	  //int numvertices= cell.length*cell[0].length;
+	  int [][] graph = new int[row][column]; //matrix representation of the graph
+	 
 	  
 	  
 	  
