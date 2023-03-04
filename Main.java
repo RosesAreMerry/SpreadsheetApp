@@ -2,15 +2,14 @@ import java.util.function.Function;
 
 import Cell.Cell;
 import Cell.Tokens.CellToken;
-import Spreadsheet.Spreadsheet;
 
 
 public class Main {
 
   public static void main(String[] args) {
 	    
-    Function<CellToken, Integer> getCellToken = (cell) -> {
-      return 0;
+    Function<CellToken, Cell> getCellToken = (cell) -> {
+      return null;
     };
     
     

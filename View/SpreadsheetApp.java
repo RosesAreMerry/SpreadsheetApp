@@ -99,7 +99,6 @@ public class SpreadsheetApp {
     
         System.out.println("Enter the cell's new formula: ");
         inputFormula = readString();
-        expTreeTokenStack = Cell.getFormula(inputFormula);
         System.out.println( "the formula you enetered : "+inputFormula);
         
         /*
@@ -112,7 +111,7 @@ public class SpreadsheetApp {
         }
         */
     
-        theSpreadsheet.changeCellFormulaAndRecalculate(cellToken, expTreeTokenStack);
+        theSpreadsheet.changeCellFormulaAndRecalculate(cellToken, inputFormula);
         System.out.println();
     }
     

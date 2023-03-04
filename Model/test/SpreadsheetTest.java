@@ -1,10 +1,9 @@
 /*
 
  */
-package Model.test;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,12 +16,9 @@ import java.io.PrintStream;
 class SpreadsheetTest {
 
 
-	Function<CellToken, Integer> getCellToken1 = (cell) -> {
-		return 2;
-	};
 	Spreadsheet testSpreadsheet = new Spreadsheet(2);
 
-	Cell testCell = new Cell(1, 1, "1+1", getCellToken1 );
+	Cell testCell = Cell.testCell;
 
 	static CellToken theTestCellToken1=new CellToken();
 
