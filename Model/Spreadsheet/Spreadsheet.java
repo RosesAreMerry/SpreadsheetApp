@@ -132,13 +132,16 @@ public class Spreadsheet {
   }
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
-	  int cellrow= cellToken.getRow();
-	  int cellcoulumn= cellToken.getColumn();
-	  changeCellFormula( cellToken, formula);
-	  cell[cellrow][cellcoulumn].recalculate();
-	  int value= cell[cellrow][cellcoulumn].getValue();
-	  System.out.println(value);
-	  //CellToken[] d= cell[cellrow][cellcoulumn].getDependencies();
+	  changeCellFormula(cellToken, formula);
+	  int row= cellToken.getRow();
+	  int column= cellToken.getColumn();
+	  CellToken[] fomulatokens= cell[row][column].getDependencies();
+	  
+	  
+	  
+	  
+	 
+	  
   }
 
   public void changeCellFormulaAndRecalculate(CellToken cellToken, Stack<Token> formula) {
