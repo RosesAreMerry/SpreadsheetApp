@@ -2,11 +2,19 @@ package Cell;
 
 import java.util.Stack;
 import java.util.function.Function;
+//import java.util.stream.Collectors;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 import Cell.Tokens.CellToken;
 import Cell.Tokens.LiteralToken;
 import Cell.Tokens.OperatorToken;
 import Cell.Tokens.Token;
+
 
 public class Cell {
 
@@ -14,10 +22,10 @@ public class Cell {
   private int column;
   private String formula;
   private Stack<Token> postfixFormula;
-  private final Function<CellToken, Integer> getCellValue;
+  private final Function<CellToken, Cell> getCellValue;
   private int value;
 
-  public Cell(int row, int column, String formula, Function<CellToken, Integer> getCellValue) {
+  public Cell(int row, int column, String formula, Function<CellToken, Cell> getCellValue) {
     setRow(row);
     setColumn(column);
     setFormula(formula);
@@ -54,15 +62,26 @@ public class Cell {
     return value;
   }
 
-  public CellToken[] getDependencies() {
-    Stack<CellToken> dependencies = new Stack<CellToken>();
-    for (Token token : postfixFormula) {
-      if (token instanceof CellToken) {
-        dependencies.push((CellToken) token);
-      }
-    }
-    return dependencies.toArray(new CellToken[dependencies.size()]);
-  }
+
+  /** Function that returns a list of all dependencies in the order they need to be calculated.
+   * 
+   * @return ArrayList<Cell> list of all dependencies in the order they need to be calculated
+   */
+  public ArrayList<Cell> getDependencies() {
+	  List<Cell> dependencies = new ArrayList<>();
+	    for (Token token : postfixFormula) {
+	        if (token instanceof CellToken) {
+	            dependencies.add(getCellValue.apply((CellToken) token));
+	        }
+	    }
+	    return (ArrayList<Cell>) dependencies;
+	}
+  
+//  public List<Cell> getDependencies() {
+//    return postfixFormula.stream().filter(token -> token instanceof CellToken)
+//    		.map(token -> getCellValue.apply((CellToken) token))
+//    		.collect(Collectors.toList());
+//  }
 
   public void recalculate() {
     Stack<Integer> currentValues = new Stack<Integer>();
@@ -74,7 +93,7 @@ public class Cell {
       if (token instanceof LiteralToken) {
         currentValues.push(((LiteralToken) token).getValue());
       } else if (token instanceof CellToken) {
-        currentValues.push(getCellValue.apply((CellToken) token));
+        currentValues.push(getCellValue.apply((CellToken) token).getValue());
       } else if (token instanceof OperatorToken) {
         if (currentValues.size() >= 2) {
           value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
