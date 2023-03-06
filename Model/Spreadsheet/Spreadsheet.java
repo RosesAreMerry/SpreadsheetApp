@@ -70,20 +70,20 @@ public class Spreadsheet {
   
   // TODO Implement version of method that returns a String
   public String printAllFormulas(){	  
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < dimensions; i++) {
-			for (int j = 0; j < dimensions; j++) {
-				char row = (char) (i % 26 + 65);
-				if (cell[i][j] != null) {
-					sb.append(row).append(j + 1).append(":").append(cell[i][j].getFormula()).append(" ");
-				} else {
-					sb.append(row).append(j + 1).append(": 0");
-				}
+	StringBuilder sb = new StringBuilder();
+	for (int i = 0; i < dimensions; i++) {
+		for (int j = 0; j < dimensions; j++) {
+			char row = (char) (i % 26 + 65);
+			if (cell[i][j] != null) {
+				sb.append(row).append(j + 1).append(":").append(cell[i][j].getFormula()).append(" ");
+			} else {
+				sb.append(row).append(j + 1).append(": 0");
 			}
-			sb.append("\n");
 		}
-		return sb.toString();
+			sb.append("\n");
 	}
+	return sb.toString();
+}
   
   /**
    * changes the cellformula to a new formula 
@@ -103,7 +103,7 @@ public class Spreadsheet {
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
 		 cell[row][column]=newCell;		 
 	  }
-  }
+}
   
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
 	  changeCellFormula(cellToken, formula);
