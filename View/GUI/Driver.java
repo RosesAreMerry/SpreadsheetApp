@@ -1,8 +1,11 @@
-/*
- * TCSS 305 - Assignment 4
+/**
+ * Driver Class
+ * TCSS 342 - HW 6b
+ * 3/6/2023
+ * Jacob Erickson
  */
 
-package experimentalGUI;
+package GUI;
 
 import java.awt.EventQueue;
 

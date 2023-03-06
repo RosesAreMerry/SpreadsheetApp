@@ -1,15 +1,14 @@
-package experimentalGUI;
-/*
+package GUI;
+/**
  * GUI Class
- * TCSS 342 - 3/1/23
+ * TCSS 342 - HW 6b
+ * 3/6/2023
  * Jacob Erickson
  */
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,17 +66,12 @@ public class GUI {
 	private JButton myRightButton;
 	private JButton myUpButton;
 	private JButton myDownButton;
-
-	private ButtonGroup myButtonGroup;
 	
 	public GUI() {
 		start();
 	}
 	
 	public void start() {
-		
-
-		
 		
 		myMenuBar = new JMenuBar();
 		
@@ -174,7 +167,6 @@ public class GUI {
 		GUI.setLocationRelativeTo(null);
         GUI.setVisible(true);
         
-        System.out.println(generateColumnLabel(701));
 	}
 	
 	private void relabel(int theStartColumn, int theStartRow) {
@@ -185,30 +177,30 @@ public class GUI {
 	}
 	
 	private String generateColumnLabel(int theColumn) {	
+		theColumn++;
 		final String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int base = 1;
+		int power = 0;
 		String cellID = "";
-		
-		// Check if number is greater than 25
-		
-		
-		
-		
-		while (theColumn >= 26) {
-			int product = theColumn / 26;
-			cellID += alphanumeric.substring(product - 1, product);
-			theColumn -= product * 26;
+		while (theColumn >= base) {
+			power++;
+			int count = (int) Math.pow(alphanumeric.length(), power - 1);
+			int index = (((theColumn - 1) / count) + alphanumeric.length());
+			if (power > 1) {
+				index--;
+			}
+			index %= alphanumeric.length();
+			cellID = alphanumeric.substring(index, index+1) + cellID;
+			count *= alphanumeric.length();
+			base += count;
 		}
-		
-		cellID += alphanumeric.substring(theColumn, theColumn + 1);
-		
-        return cellID;
+		return cellID;
 	}
 	
 	/**
-     * Creates a single button that either opens, saves, or closes an image,
-     * depending on the button pressed on the bottom panel.
-     * 
-     * @param theName The label of the control panel button.
+     * Creates a single button that 
+     * @param theName The row of the cell.
+     * @param theColumn The column of the cell.
      * @return the button.
      */
     private JButton createCellButton(int theRow, int theColumn) {
@@ -224,7 +216,11 @@ public class GUI {
 
         return button;
     }
-    
+    /**
+     * Helps display a cell change
+     * @param theRow
+     * @param theColumn
+     */
 	private void cellChangeHelper(int theRow, int theColumn) {
 		
 		String cellID = (generateColumnLabel(theColumn + myCurrentX) + (theRow + myCurrentY + 1));

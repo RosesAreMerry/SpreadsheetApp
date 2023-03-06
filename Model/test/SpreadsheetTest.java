@@ -1,7 +1,13 @@
 /**
  * TCSS 342 Assignment 6B - Spreadsheet App
  */
-package Model.test;
+
+// I'm not sure if this breaks the code on anyone else's end but
+// I had to change "Model.test" to "test" to get the code to run on
+// my end. 
+// - Jacob Erickson
+
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
