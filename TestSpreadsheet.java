@@ -68,10 +68,10 @@
 	    Spreadsheet spreadsheet= new Spreadsheet(2);
 	    spreadsheet.changeCellFormula( theTestCellToken1, "5+5");
 	    spreadsheet.changeCellFormula( theTestCellToken2, "5+4");
-	    spreadsheet.changeCellFormula( theTestCellToken3,  "(B1)/A0");
-	    spreadsheet.changeCellFormula( theTestCellToken4,  "B0+B1");
+	    spreadsheet.changeCellFormula( theTestCellToken3,  "2+10");
+	    spreadsheet.changeCellFormula( theTestCellToken4,  "A1+A2");
 	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, null);
-	    //spreadsheet.changeCellFormulaAndRecalculate(theTestCellToken2, " A0+B1");
+	    spreadsheet.changeCellFormulaAndRecalculate(theTestCellToken2, " A0+B1");
 	    System.out.println(spreadsheet.printAllFormulas());
 	    System.out.println(spreadsheet.printValues());
 	   
