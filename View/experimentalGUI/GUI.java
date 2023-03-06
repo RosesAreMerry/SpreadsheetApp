@@ -98,11 +98,6 @@ public class GUI {
 		myLeftButton.setEnabled(false);
 		myUpButton.setEnabled(false);
 		
-		if (true) {
-			myRightButton.setEnabled(false);
-			myDownButton.setEnabled(false);
-		}
-		
 		horizontalMovePanel.setLayout(new FlowLayout());
 		verticalMovePanel.setLayout(new BoxLayout(verticalMovePanel, BoxLayout.Y_AXIS));
 
