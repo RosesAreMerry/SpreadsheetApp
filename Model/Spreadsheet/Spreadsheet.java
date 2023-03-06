@@ -188,8 +188,14 @@ public class Spreadsheet {
 
 	private void recalculateAll() {
 		ArrayList<Cell> sortedCells = topologicalSort();
-		for (Cell cell : sortedCells) {
-			cell.recalculate();
+		// A topological sort will give us the cells that have no references first,
+		// And the cells that other cells depend on later.
+		// However, if we want to recalculate the spreadsheet, we need to start
+		// with the cells that other cells depend on, and work our way back to the
+		// cells that have no references.
+		// However, reversing the list is expensive so we just traverse it backwards.
+		for (int i = sortedCells.size() - 1; i >= 0; i--) {
+			sortedCells.get(i).recalculate();
 		}
 	}
   
