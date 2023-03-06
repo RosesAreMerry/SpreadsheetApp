@@ -168,14 +168,16 @@ class SpreadsheetTest {
 	void testChangeCellFormulaAndRecalculateOnA1() {
 		testSpreadsheet.changeCellFormula(theTestCellToken1, "4+2");//A1
 		testSpreadsheet.changeCellFormula(theTestCellToken2, "4+A1"); //A2
-		testSpreadsheet.changeCellFormula(theTestCellToken3, "0");//B1
+		testSpreadsheet.changeCellFormula(theTestCellToken3, "B2+2");//B1
 		testSpreadsheet.changeCellFormula(theTestCellToken4, "2+2"); //B2
 
-		testSpreadsheet.changeCellFormulaAndRecalculate(theTestCellToken2, "1+1");
+		//testSpreadsheet.changeCellFormula(theTestCellToken2, "A1+B2" ); //A2
+		//testSpreadsheet.changeCellFormulaAndRecalculate(theTestCellToken1, "1+2"); //A2
 		//ByteArrayOutputStream output = new ByteArrayOutputStream();
 		//System.setOut(new PrintStream(output));
 
-		testSpreadsheet.printValues();
+		System.out.println(testSpreadsheet.printAllFormulas());
+		System.out.println(testSpreadsheet.printValues());
 
 
 	}
