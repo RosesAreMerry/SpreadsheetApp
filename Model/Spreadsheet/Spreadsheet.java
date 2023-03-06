@@ -31,11 +31,11 @@ public class Spreadsheet {
 	  StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
-				char row = (char) (i % 26 + 65);
+				char column = (char) (j % 26 + 65);
 				if (cell[i][j] != null) {
-					sb.append(row).append(j+1).append(": ").append(cell[i][j].getValue()).append(" ");
+					sb.append(column).append(i+1).append(": ").append(cell[i][j].getValue()).append(" ");
 				} else {
-					sb.append(row).append(j+1).append(":0  ");
+					sb.append(column).append(i+1).append(":0  ");
 				}
 			}
 			sb.append("\n");
@@ -59,7 +59,7 @@ public class Spreadsheet {
 		}
 
 		return theFormula;
-}
+	}
 
 
   /**
@@ -68,28 +68,26 @@ public class Spreadsheet {
   
   // TODO Implement version of method that returns a String
   public String printAllFormulas(){	  
-	StringBuilder sb = new StringBuilder();
-	for (int i = 0; i < dimensions; i++) {
-		for (int j = 0; j < dimensions; j++) {
-			char row = (char) (i % 26 + 65);
-			if (cell[i][j] != null) {
-				sb.append(row).append(j+1).append(": ").append(cell[i][j].getFormula()).append(" ");
-			} else {
-				sb.append(row).append(j+1).append(": 0 ");
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < dimensions; i++) {
+			for (int j = 0; j < dimensions; j++) {
+				char column = (char) (j % 26 + 65);
+				if (cell[i][j] != null) {
+					sb.append(column).append(i+1).append(": ").append(cell[i][j].getFormula()).append(" ");
+				} else {
+					sb.append(column).append(i+1).append(": 0 ");
+				}
 			}
+				sb.append(" \n");
 		}
-			sb.append(" \n");
+		return sb.toString();
 	}
-	return sb.toString();
-}
   
   /**
-   * changes the cellformula to a new formula 
+   * changes the cell formula to a new formula.
    * @param cellToken
    * @param formula
    */
-  
-  // TODO version of method that accepts 2 Strings
   public void changeCellFormula(CellToken celltoken, String formula) {
 	  int row = celltoken.getRow(); 
 	  int column = celltoken.getColumn(); 
@@ -99,16 +97,16 @@ public class Spreadsheet {
 		  cell[row][column].recalculate();
 	  }
 	  else {		  
-		 Cell newCell= new Cell(row, column, formula, lookupCell);
-		 cell[row][column]=newCell;		 
+		 Cell newCell = new Cell(row, column, formula, lookupCell);
+		 cell[row][column] = newCell;
 	  }
 }
   /**
    * @overload
    */
-  public void changeCellFormula(String celltoken, String formula) {
-	  CellToken newcelltoken=CellToken.getCellToken(celltoken);
-	  changeCellFormula(newcelltoken,  formula);
+  public void changeCellFormula(String cellToken, String formula) {
+	  CellToken newCellToken = CellToken.getCellToken(cellToken);
+	  changeCellFormula(newCellToken, formula);
 }
   
 /**

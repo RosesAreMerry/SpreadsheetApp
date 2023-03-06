@@ -42,7 +42,7 @@ public class SpreadsheetApp {
     }
     
     private static void menuPrintValues(Spreadsheet theSpreadsheet) {
-        theSpreadsheet.printValues();
+        System.out.print(theSpreadsheet.printValues());
     }
     
     private static void menuPrintCellFormula(Spreadsheet theSpreadsheet) {
@@ -65,12 +65,12 @@ public class SpreadsheetApp {
             return;
         }
     
-        theSpreadsheet.printCellFormula(cellToken);
+        System.out.print(theSpreadsheet.printCellFormula(cellToken));
         System.out.println();
     }
     
     private static void menuPrintAllFormulas(Spreadsheet theSpreadsheet) {
-        theSpreadsheet.printAllFormulas();
+        System.out.print(theSpreadsheet.printAllFormulas());
         System.out.println();
     }
     
@@ -99,7 +99,7 @@ public class SpreadsheetApp {
     
         System.out.println("Enter the cell's new formula: ");
         inputFormula = readString();
-        System.out.println( "the formula you enetered : "+inputFormula);
+        System.out.println( "the formula you enetered : "+ inputFormula);
         
         /*
         // This code prints out the expression stack from
@@ -110,8 +110,8 @@ public class SpreadsheetApp {
             printExpressionTreeToken(expTreeToken);
         }
         */
-    
-        //theSpreadsheet.changeCellFormulaAndRecalculate(cellToken, inputFormula);
+
+        theSpreadsheet.changeCellFormulaAndRecalculate(cellToken, inputFormula);
         System.out.println();
     }
     

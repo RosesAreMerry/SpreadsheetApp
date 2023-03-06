@@ -87,26 +87,34 @@ public class Cell {
     Stack<Integer> currentValues = new Stack<Integer>();
     int result = 0;
 
-    while (!postfixFormula.isEmpty()) {
-      Token token = postfixFormula.pop();
+    Stack<Token> formula = new Stack<Token>();
+
+    formula.addAll(postfixFormula);
+
+    while (!formula.isEmpty()) {
+      Token token = formula.pop();
       Integer value = null;
       if (token instanceof LiteralToken) {
         currentValues.push(((LiteralToken) token).getValue());
       } else if (token instanceof CellToken) {
     	  
-    	  // TODO Null check on token, set value to 0 if checked cell is null
-        currentValues.push(getCellValue.apply((CellToken) token).getValue());
-        
+        Cell cell = getCellValue.apply((CellToken) token);
+
+        if (cell != null) {
+          currentValues.push(getCellValue.apply((CellToken) token).getValue());
+        } else {
+          currentValues.push(0);
+        }
       } else if (token instanceof OperatorToken) {
         if (currentValues.size() >= 2) {
           value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
-          postfixFormula.push(new LiteralToken(value));
+          formula.push(new LiteralToken(value));
         }
       }
-      if (postfixFormula.size() == 1 && postfixFormula.peek() instanceof LiteralToken) {
-        result = ((LiteralToken) postfixFormula.pop()).getValue();
+      if (formula.size() == 1 && formula.peek() instanceof LiteralToken) {
+        result = ((LiteralToken) formula.pop()).getValue();
       }
-      if (postfixFormula.isEmpty() && currentValues.size() == 1) {
+      if (formula.isEmpty() && currentValues.size() == 1) {
         result = currentValues.pop();
       }
     }
