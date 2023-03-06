@@ -18,7 +18,10 @@ class SpreadsheetTest {
 
 	Spreadsheet testSpreadsheet = new Spreadsheet(2);
 
+<<<<<<< HEAD
 	Cell testCell;
+=======
+>>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
 
 	static CellToken theTestCellToken1=new CellToken();
 
@@ -93,13 +96,14 @@ class SpreadsheetTest {
 		testSpreadsheet.changeCellFormula(theTestCellToken3, "B0-11");
 
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-	//	System.setOut(new PrintStream(output));
+		System.setOut(new PrintStream(output));
 
 		testSpreadsheet.printAllFormulas();
 
-	//	String expectedOutput = "3+11+A0B0-110";
+		String expectedOutput = "A1:3+1 A2:1+A0 \n" +
+				"B1:B0-11 B2: 0\n";
 
-	//	assertEquals(expectedOutput, output.toString().replace("\r\n", ""));
+		assertEquals(expectedOutput, output.toString().replace("\r\n", ""));
 	}
 
 	@Test
