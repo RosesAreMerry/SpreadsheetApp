@@ -33,9 +33,9 @@ public class Spreadsheet {
 			for (int j = 0; j < dimensions; j++) {
 				char row = (char) (i % 26 + 65);
 				if (cell[i][j] != null) {
-					sb.append(row).append(j + 1).append(": ").append(cell[i][j].getValue()).append(" ");
+					sb.append(row).append(j+1).append(": ").append(cell[i][j].getValue()).append(" ");
 				} else {
-					sb.append(row).append(j + 1).append(":0  ");
+					sb.append(row).append(j+1).append(":0  ");
 				}
 			}
 			sb.append("\n");
@@ -73,9 +73,9 @@ public class Spreadsheet {
 		for (int j = 0; j < dimensions; j++) {
 			char row = (char) (i % 26 + 65);
 			if (cell[i][j] != null) {
-				sb.append(row).append(j + 1).append(": ").append(cell[i][j].getFormula()).append(" ");
+				sb.append(row).append(j+1).append(": ").append(cell[i][j].getFormula()).append(" ");
 			} else {
-				sb.append(row).append(j + 1).append(": 0 ");
+				sb.append(row).append(j+1).append(": 0 ");
 			}
 		}
 			sb.append(" \n");
@@ -96,7 +96,7 @@ public class Spreadsheet {
 	  //set the formula to new formula 
 	  if (cell[row][column] != null) {
 		  cell[row][column].setFormula(formula);
-		   cell[row][column].recalculate();
+		  cell[row][column].recalculate();
 	  }
 	  else {		  
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
