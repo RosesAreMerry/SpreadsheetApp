@@ -18,7 +18,7 @@ class SpreadsheetTest {
 
 	Spreadsheet testSpreadsheet = new Spreadsheet(2);
 
-	Cell testCell = Cell.testCell;
+	Cell testCell;
 
 	static CellToken theTestCellToken1=new CellToken();
 
