@@ -73,7 +73,7 @@ public class Spreadsheet {
 				if (cell[i][j] != null) {
 					sb.append(row).append(j + 1).append(":").append(cell[i][j].getFormula()).append(" ");
 				} else {
-					sb.append(row).append(j + 1).append(":  ");
+					sb.append(row).append(j + 1).append(": 0");
 				}
 			}
 			sb.append("\n");
