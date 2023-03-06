@@ -93,7 +93,10 @@ public class Cell {
       if (token instanceof LiteralToken) {
         currentValues.push(((LiteralToken) token).getValue());
       } else if (token instanceof CellToken) {
+    	  
+    	  // TODO Null check on token, set value to 0 if checked cell is null
         currentValues.push(getCellValue.apply((CellToken) token).getValue());
+        
       } else if (token instanceof OperatorToken) {
         if (currentValues.size() >= 2) {
           value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
