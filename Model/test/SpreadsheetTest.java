@@ -18,11 +18,6 @@ class SpreadsheetTest {
 
 	Spreadsheet testSpreadsheet = new Spreadsheet(2);
 
-<<<<<<< HEAD
-	Cell testCell;
-=======
->>>>>>> branch 'master' of https://github.com/RosesAreMerry/SpreadsheetApp.git
-
 	static CellToken theTestCellToken1=new CellToken();
 
 	static CellToken theTestCellToken2=new CellToken();

@@ -35,7 +35,7 @@ public class GUI {
     /** The JFrame. */
     private static final JFrame GUI = new JFrame("TCSS 342 Spreadsheet App");
 	
-	private static final int LENGTH = 8;
+	private static final int LENGTH = 10;
 	
 	private static final Spreadsheet SPREADSHEET = new Spreadsheet(LENGTH);
 	
@@ -78,6 +78,8 @@ public class GUI {
 	public void start() {
 		
 
+		
+		
 		myMenuBar = new JMenuBar();
 		
 		final JPanel buttonPanel = new JPanel(new GridLayout(LENGTH + 1, LENGTH + 1));
@@ -171,6 +173,8 @@ public class GUI {
 		GUI.setSize(new Dimension(3 * SCREEN_WIDTH / 5, 2 * SCREEN_HEIGHT / 3));
 		GUI.setLocationRelativeTo(null);
         GUI.setVisible(true);
+        
+        System.out.println(generateColumnLabel(701));
 	}
 	
 	private void relabel(int theStartColumn, int theStartRow) {
@@ -183,6 +187,11 @@ public class GUI {
 	private String generateColumnLabel(int theColumn) {	
 		final String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String cellID = "";
+		
+		// Check if number is greater than 25
+		
+		
+		
 		
 		while (theColumn >= 26) {
 			int product = theColumn / 26;
@@ -222,11 +231,11 @@ public class GUI {
 		
 		String s = (String) JOptionPane.showInputDialog(GUI, "Change formula for cell " + cellID + ":", 
 				"Change Cell Fomula", JOptionPane.QUESTION_MESSAGE, null, null, "Type Here!");
-		
-		cToken.setRow(theRow);
-		cToken.setColumn(theColumn);
-		SPREADSHEET.changeCellFormulaAndRecalculate(cToken, s);
-		
+		if (s != null) {
+			cToken.setRow(theRow);
+			cToken.setColumn(theColumn);
+			SPREADSHEET.changeCellFormulaAndRecalculate(cToken, s);
+		}
 	}
     
     /**

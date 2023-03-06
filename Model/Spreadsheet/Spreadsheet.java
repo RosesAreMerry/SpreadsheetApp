@@ -48,6 +48,8 @@ public class Spreadsheet {
   /**
    *  prints the formula of a single cell
    */
+  
+  //TODO Implement version of method that returns a String
   public void printCellFormula(CellToken cellToken) {
 		String theFormula;
 		int row = cellToken.getRow(); //get the row.  
@@ -65,6 +67,8 @@ public class Spreadsheet {
   /**
    *  print formulas of all the cells in the spreadsheet 
    */
+  
+  // TODO Implement version of method that returns a String
   public void printAllFormulas(){	  
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
@@ -87,6 +91,7 @@ public class Spreadsheet {
    * @param formula
    */
   
+  // TODO version of method that accepts 2 Strings
   public void changeCellFormula(CellToken cellToken, String formula) {
 	  int row = cellToken.getRow(); // get the row.  
 	  int column = cellToken.getColumn(); // get the column.
