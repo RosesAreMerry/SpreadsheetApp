@@ -91,8 +91,8 @@ public class Spreadsheet {
   
   // TODO version of method that accepts 2 Strings
   public void changeCellFormula(CellToken celltoken, String formula) {
-	  int row = celltoken.getColumn(); 
-	  int column = celltoken.getRow(); 
+	  int row = celltoken.getRow(); 
+	  int column = celltoken.getColumn(); 
 	  //set the formula to new formula 
 	  if (cell[row][column] != null) {
 		  cell[row][column].setFormula(formula);

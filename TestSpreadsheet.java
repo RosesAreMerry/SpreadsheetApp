@@ -9,41 +9,72 @@
 	public class TestSpreadsheet {
 
 	  public static void main(String[] args) {
+		  
+		  Spreadsheet testSpreadsheet = new Spreadsheet(2);
+
+			/**
+			 * Test CellToken for A0
+			 */
+			 CellToken theTestCellToken1=new CellToken();
+
+			/**
+			 * Test CellToken for A1
+			 */
+		    CellToken theTestCellToken2=new CellToken();
+
+			/**
+			 * Test CellToken for B0
+			 */
+			 CellToken theTestCellToken3=new CellToken();
+
+			/**
+			 * Test CellToken for B1
+			 */
+			 CellToken theTestCellToken4=new CellToken();
+
 		    
-	    Function<CellToken, Integer> getCellToken = (cell) -> {
-	      return 0;
-	    };
-	    
-	    CellToken celltoken=new CellToken();
-	    
-	     celltoken.setColumn(1);
-	     celltoken.setRow(1);
-	     
-	     CellToken celltoken1=new CellToken();
-	     celltoken1.setColumn(0);
-	     celltoken1.setRow(0);
-	     
-	     CellToken celltoken2=new CellToken();
-	     celltoken2.setRow(0);
-	     celltoken2.setColumn(1);
+//	    Function<CellToken, Integer> getCellToken = (cell) -> {
+//	      return 0;
+//	    };
+//	    
+//	    CellToken celltoken=new CellToken();
+//	    
+//	     celltoken.setColumn(1);
+//	     celltoken.setRow(1);
+//	     
+//	     CellToken celltoken1=new CellToken();
+//	     celltoken1.setColumn(0);
+//	     celltoken1.setRow(0);
+//	     
+//	     CellToken celltoken2=new CellToken();
+//	     celltoken2.setRow(0);
+//	     celltoken2.setColumn(1);
 	     
 //	     CellToken celltoken3=new CellToken();
 //	     celltoken2.setRow(1);
 //	     celltoken2.setColumn(0);
 	     
 	    
-	   
+			theTestCellToken1.setRow(0);
+			theTestCellToken1.setColumn(0); //A0
+			theTestCellToken2.setRow(0);
+			theTestCellToken2.setColumn(1); //A1
+			theTestCellToken3.setRow(1);
+			theTestCellToken3.setColumn(0);// B0
+			theTestCellToken4.setRow(1);
+			theTestCellToken4.setColumn(1);// B1   
 	    
 	    
 	    Spreadsheet spreadsheet= new Spreadsheet(2);
-	    spreadsheet.changeCellFormula(celltoken1, "5+5");
-	    spreadsheet.changeCellFormula(celltoken, "5+4");
-	    spreadsheet.changeCellFormula(celltoken2,  "(B1)/A0");
-	    spreadsheet.changeCellFormula(celltoken,  "B0+B1");
+	    spreadsheet.changeCellFormula( theTestCellToken1, "5+5");
+	    spreadsheet.changeCellFormula( theTestCellToken2, "5+4");
+	    spreadsheet.changeCellFormula( theTestCellToken3,  "(B1)/A0");
+	    spreadsheet.changeCellFormula( theTestCellToken4,  "B0+B1");
 	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, null);
+	    //spreadsheet.changeCellFormulaAndRecalculate(theTestCellToken2, " A0+B1");
 	    System.out.println(spreadsheet.printAllFormulas());
 	    System.out.println(spreadsheet.printValues());
-	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, " A0+B1");
+	   
 	  
 	    System.out.println();
 	    //spreadsheet.printCellFormula(celltoken3);
