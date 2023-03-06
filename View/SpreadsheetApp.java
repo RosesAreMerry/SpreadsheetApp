@@ -111,7 +111,7 @@ public class SpreadsheetApp {
         }
         */
     
-        theSpreadsheet.changeCellFormulaAndRecalculate(cellToken, inputFormula);
+        //theSpreadsheet.changeCellFormulaAndRecalculate(cellToken, inputFormula);
         System.out.println();
     }
     

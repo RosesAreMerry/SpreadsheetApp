@@ -33,7 +33,7 @@ public class Spreadsheet {
 			for (int j = 0; j < dimensions; j++) {
 				char row = (char) (i % 26 + 65);
 				if (cell[i][j] != null) {
-					sb.append(row).append(j + 1).append(" :  ").append(cell[i][j].getValue()).append(" ");
+					sb.append(row).append(j + 1).append(": ").append(cell[i][j].getValue()).append(" ");
 				} else {
 					sb.append(row).append(j + 1).append(":0  ");
 				}
@@ -75,12 +75,12 @@ public class Spreadsheet {
 		for (int j = 0; j < dimensions; j++) {
 			char row = (char) (i % 26 + 65);
 			if (cell[i][j] != null) {
-				sb.append(row).append(j + 1).append(":").append(cell[i][j].getFormula()).append(" ");
+				sb.append(row).append(j + 1).append(": ").append(cell[i][j].getFormula()).append(" ");
 			} else {
-				sb.append(row).append(j + 1).append(": 0");
+				sb.append(row).append(j + 1).append(": 0 ");
 			}
 		}
-			sb.append("\n");
+			sb.append(" \n");
 	}
 	return sb.toString();
 }
@@ -92,9 +92,13 @@ public class Spreadsheet {
    */
   
   // TODO version of method that accepts 2 Strings
-  public void changeCellFormula(CellToken cellToken, String formula) {
-	  int row = cellToken.getRow(); // get the row.  
-	  int column = cellToken.getColumn(); // get the column.
+  public void changeCellFormula(String celltoken, String formula) {
+	  //convert the string to a celltoken type.
+	  CellToken newcelltoken=CellToken.getCellToken(celltoken);
+	  //get row and column
+	  int row = newcelltoken.getColumn(); 
+	  int column = newcelltoken.getRow(); 
+	  //set the formula to new formula 
 	  if (cell[row][column] != null) {
 		  cell[row][column].setFormula(formula);
 		   cell[row][column].recalculate();
@@ -104,8 +108,12 @@ public class Spreadsheet {
 		 cell[row][column]=newCell;		 
 	  }
 }
-  
-  public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
+/**
+ * changes the cell formula and recalculates the values of the spreadsheet.   
+ * @param cellToken
+ * @param formula
+ */
+  public void changeCellFormulaAndRecalculate(String cellToken, String formula) {
 	  changeCellFormula(cellToken, formula);
 	  recalculateAll();
   }

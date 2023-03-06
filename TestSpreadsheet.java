@@ -36,13 +36,13 @@
 	    
 	    
 	    Spreadsheet spreadsheet= new Spreadsheet(2);
-	    spreadsheet.changeCellFormula(celltoken1, "5+5");
-	    spreadsheet.changeCellFormula(celltoken, "5+4");
-	    spreadsheet.changeCellFormula(celltoken2,  "(B1)/A0");
-	    spreadsheet.changeCellFormula(celltoken,  "B0+B1");
+	    spreadsheet.changeCellFormula("A1", "5+5");
+	    spreadsheet.changeCellFormula("A2", "5+4");
+//	    spreadsheet.changeCellFormula(celltoken2,  "(B1)/A0");
+	    //spreadsheet.changeCellFormula(celltoken,  "B0+B1");
 	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, null);
-	    spreadsheet.printAllFormulas();
-	    spreadsheet.printValues();
+	    System.out.println(spreadsheet.printAllFormulas());
+	    System.out.println(spreadsheet.printValues());
 	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, " A0+B1");
 	  
 	    System.out.println();
