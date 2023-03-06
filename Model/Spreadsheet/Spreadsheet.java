@@ -97,7 +97,7 @@ public class Spreadsheet {
 	  int column = cellToken.getColumn(); // get the column.
 	  if (cell[row][column] != null) {
 		  cell[row][column].setFormula(formula);
-			recalculateAll();
+		cell[row][column].recalculate();
 	  }
 	  else {		  
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
