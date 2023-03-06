@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
 import Cell.Cell;
 import Cell.Tokens.CellToken;
 
@@ -28,20 +27,21 @@ public class Spreadsheet {
  /**
   *  prints the values of a cell
   */
-  public void printValues() {
+  public String printValues() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
 				char row = (char) (i % 26 + 65);
 				if (cell[i][j] != null) {
-					sb.append(row).append(j + 1).append(": ").append(cell[i][j].getValue()).append("  ");
+					sb.append(row).append(j + 1).append(" :  ").append(cell[i][j].getValue()).append(" ");
 				} else {
 					sb.append(row).append(j + 1).append(":0  ");
 				}
 			}
 			sb.append("\n");
 		}
-		System.out.println(sb.toString());
+		
+		return sb.toString();
 
   }
 
@@ -50,7 +50,7 @@ public class Spreadsheet {
    */
   
   //TODO Implement version of method that returns a string
-  public void printCellFormula(CellToken cellToken) {
+  public String printCellFormula(CellToken cellToken) {
 		String theFormula;
 		int row = cellToken.getRow(); //get the row.  
 		int column = cellToken.getColumn(); //get the column.
@@ -60,8 +60,8 @@ public class Spreadsheet {
 			theFormula = "";
 		}
 
-		System.out.println(theFormula);
-	}
+		return theFormula;
+}
 
 
   /**
@@ -69,7 +69,7 @@ public class Spreadsheet {
    */
   
   // TODO Implement version of method that returns a String
-  public void printAllFormulas(){	  
+  public String printAllFormulas(){	  
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
@@ -82,7 +82,7 @@ public class Spreadsheet {
 			}
 			sb.append("\n");
 		}
-		System.out.println(sb.toString());
+		return sb.toString();
 	}
   
   /**
