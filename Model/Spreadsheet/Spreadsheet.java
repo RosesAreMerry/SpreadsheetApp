@@ -35,7 +35,7 @@ public class Spreadsheet {
 				if (cell[i][j] != null) {
 					sb.append(column).append(i+1).append(": ").append(cell[i][j].getValue()).append(" ");
 				} else {
-					sb.append(column).append(i+1).append(":0  ");
+					sb.append(column).append(i+1).append(": 0 ");
 				}
 			}
 			sb.append("\n");
@@ -46,8 +46,6 @@ public class Spreadsheet {
   /**
    *  prints the formula of a single cell
    */
-  
-  //TODO Implement version of method that returns a string
   public String printCellFormula(CellToken cellToken) {
 		String theFormula;
 		int row = cellToken.getRow(); //get the row.  
@@ -65,8 +63,6 @@ public class Spreadsheet {
   /**
    *  print formulas of all the cells in the spreadsheet 
    */
-  
-  // TODO Implement version of method that returns a String
   public String printAllFormulas(){	  
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
