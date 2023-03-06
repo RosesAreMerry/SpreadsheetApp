@@ -41,8 +41,8 @@
 	    spreadsheet.changeCellFormula(celltoken2,  "(B1)/A0");
 	    spreadsheet.changeCellFormula(celltoken,  "B0+B1");
 	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, null);
-	    spreadsheet.printAllFormulas();
-	    spreadsheet.changeCellFormulaAndRecalculate(celltoken2, "A0+B1");
+	    spreadsheet.printValues();
+	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, " A0+B1");
 	  
 	    System.out.println();
 	    //spreadsheet.printCellFormula(celltoken3);

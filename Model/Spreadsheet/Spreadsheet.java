@@ -34,9 +34,9 @@ public class Spreadsheet {
 			for (int j = 0; j < dimensions; j++) {
 				char row = (char) (i % 26 + 65);
 				if (cell[i][j] != null) {
-					sb.append(row).append(j + 1).append(":").append(cell[i][j].getValue()).append(" ");
+					sb.append(row).append(j + 1).append(": ").append(cell[i][j].getValue()).append(" ");
 				} else {
-					sb.append(row).append(j + 1).append(":0 ");
+					sb.append(row).append(j + 1).append(":0  ");
 				}
 			}
 			sb.append("\n");
