@@ -26,7 +26,7 @@ public class Spreadsheet {
 	  cell = new Cell[dimensions][dimensions];
   }
  /**
-  *  prints the values of the cell
+  *  prints the values of a cell
   */
   public void printValues() {
 		StringBuilder sb = new StringBuilder();
@@ -34,7 +34,7 @@ public class Spreadsheet {
 			for (int j = 0; j < dimensions; j++) {
 				char row = (char) (i % 26 + 65);
 				if (cell[i][j] != null) {
-					sb.append(row).append(j + 1).append(": ").append(cell[i][j].getValue()).append(" ");
+					sb.append(row).append(j + 1).append(": ").append(cell[i][j].getValue()).append("  ");
 				} else {
 					sb.append(row).append(j + 1).append(":0  ");
 				}
@@ -49,7 +49,7 @@ public class Spreadsheet {
    *  prints the formula of a single cell
    */
   
-  //TODO Implement version of method that returns a String
+  //TODO Implement version of method that returns a string
   public void printCellFormula(CellToken cellToken) {
 		String theFormula;
 		int row = cellToken.getRow(); //get the row.  
@@ -97,7 +97,7 @@ public class Spreadsheet {
 	  int column = cellToken.getColumn(); // get the column.
 	  if (cell[row][column] != null) {
 		  cell[row][column].setFormula(formula);
-		cell[row][column].recalculate();
+		   cell[row][column].recalculate();
 	  }
 	  else {		  
 		 Cell newCell= new Cell(row, column, formula, lookupCell);
