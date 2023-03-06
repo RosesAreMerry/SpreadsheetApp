@@ -28,7 +28,7 @@ public class Spreadsheet {
   *  prints the values of a cell
   */
   public String printValues() {
-		StringBuilder sb = new StringBuilder();
+	  StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
 				char row = (char) (i % 26 + 65);
@@ -39,10 +39,8 @@ public class Spreadsheet {
 				}
 			}
 			sb.append("\n");
-		}
-		
+		}		
 		return sb.toString();
-
   }
 
   /**
@@ -92,12 +90,9 @@ public class Spreadsheet {
    */
   
   // TODO version of method that accepts 2 Strings
-  public void changeCellFormula(String celltoken, String formula) {
-	  //convert the string to a celltoken type.
-	  CellToken newcelltoken=CellToken.getCellToken(celltoken);
-	  //get row and column
-	  int row = newcelltoken.getColumn(); 
-	  int column = newcelltoken.getRow(); 
+  public void changeCellFormula(CellToken celltoken, String formula) {
+	  int row = celltoken.getColumn(); 
+	  int column = celltoken.getRow(); 
 	  //set the formula to new formula 
 	  if (cell[row][column] != null) {
 		  cell[row][column].setFormula(formula);
@@ -108,12 +103,20 @@ public class Spreadsheet {
 		 cell[row][column]=newCell;		 
 	  }
 }
+  /**
+   * @overload
+   */
+  public void changeCellFormula(String celltoken, String formula) {
+	  CellToken newcelltoken=CellToken.getCellToken(celltoken);
+	  changeCellFormula(newcelltoken,  formula);
+}
+  
 /**
  * changes the cell formula and recalculates the values of the spreadsheet.   
  * @param cellToken
  * @param formula
  */
-  public void changeCellFormulaAndRecalculate(String cellToken, String formula) {
+  public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
 	  changeCellFormula(cellToken, formula);
 	  recalculateAll();
   }
