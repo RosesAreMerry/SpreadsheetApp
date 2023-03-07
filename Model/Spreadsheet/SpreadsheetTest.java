@@ -7,7 +7,7 @@
 // my end. 
 // - Jacob Erickson
 
-package Model.Spreadsheet;
+package Spreadsheet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

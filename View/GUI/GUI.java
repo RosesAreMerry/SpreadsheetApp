@@ -267,7 +267,6 @@ public class GUI {
 			for (int j = 0; j < mySSDimension; j++) {
 				displayToken.setRow(i + theStartRow); //Edited this to properly shift the spreadsheet display
 				displayToken.setColumn(j + theStartColumn);
-				System.out.print(mySpreadsheetCells[i][j].getText());
 				if (viewValues && !(SPREADSHEET.getCellFormula(displayToken).equals(""))) {
 					mySpreadsheetCells[i][j].setText("" + SPREADSHEET.getCellValue(displayToken));
 				} else {
@@ -393,8 +392,6 @@ public class GUI {
 		cellToken.setRow(theRow + myCurrentX);
 		cellToken.setColumn(theColumn + myCurrentY);
 		
-		System.out.println("Selected cell: " + cellID);
-		
 		boolean exit = false;
 		while (!exit) {
 			String former = SPREADSHEET.getCellFormula(cellToken);
@@ -413,7 +410,6 @@ public class GUI {
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
 				}
 			} else {
-				System.out.println("null");
 				exit = true;
 			}
 		}

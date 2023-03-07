@@ -54,7 +54,7 @@ public class Spreadsheet {
 		if(cell[row][column] != null) {
 			theFormula = cell[row][column].getFormula(); //get the formula in that specific row and column.
 		} else {
-			theFormula = "0";
+			theFormula = "";
 		}
 
 		return theFormula;
