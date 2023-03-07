@@ -54,7 +54,7 @@ public class Spreadsheet {
 		if(cell[row][column] != null) {
 			theFormula = cell[row][column].getFormula(); //get the formula in that specific row and column.
 		} else {
-			theFormula = "";
+			theFormula = "0";
 		}
 
 		return theFormula;
@@ -94,7 +94,7 @@ public class Spreadsheet {
   
   /**
    * changes the cell formula to a new formula.
-   * @param cellToken
+   * @param celltoken
    * @param formula
    */
   public void changeCellFormula(CellToken celltoken, String formula) throws InvalidParameterException {
