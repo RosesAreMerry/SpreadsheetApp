@@ -36,7 +36,7 @@ public class GUI {
     private static final JFrame GUI = new JFrame("TCSS 342 Spreadsheet App");
 	
     /** The size of the spreadsheet. */
-	private static final int SIZE = 32;
+	private static final int SIZE = 9;
 	
 	/** The n-by-n size of the spreadsheet display. */
 	private static final int MAX_DISPLAY = 8;
