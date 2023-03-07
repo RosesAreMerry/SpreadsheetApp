@@ -277,8 +277,8 @@ public class GUI {
 					s);
 			remoteCellToken = CellToken.getCellToken(s.toUpperCase());
 			if (remoteCellToken.getRow() > SIZE || remoteCellToken.getColumn() > SIZE) {
-				JOptionPane.showMessageDialog(GUI, "Cell outside of spreadsheet bounds!", 
-						"Cycle Detected!", JOptionPane.ERROR_MESSAGE, null);
+				JOptionPane.showMessageDialog(GUI, "Designated cell outside of spreadsheet bounds", 
+						"Error!", JOptionPane.ERROR_MESSAGE, null);
 			} else {
 				cellChangeHelper(remoteCellToken.getRow(), remoteCellToken.getColumn());
 				break;
