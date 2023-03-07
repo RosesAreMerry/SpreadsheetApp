@@ -2,13 +2,9 @@ package Cell;
 
 import java.util.Stack;
 import java.util.function.Function;
-//import java.util.stream.Collectors;
-import java.util.stream.Collectors;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
 
 import Cell.Tokens.CellToken;
 import Cell.Tokens.LiteralToken;
@@ -261,8 +257,8 @@ public class Cell {
     }
 
     if (error) {
-        // a parse error; return the empty stack
-        returnStack.clear();
+        // a parse error; throw a FormulaException
+        throw new InvalidParameterException("Invalid formula: " + formula);
     }
     Stack<Token> temp = new Stack<Token>();
    
