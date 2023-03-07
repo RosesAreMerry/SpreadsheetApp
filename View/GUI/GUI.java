@@ -265,8 +265,8 @@ public class GUI {
 		}
 		for (int i = 0; i < mySSDimension; i++) {
 			for (int j = 0; j < mySSDimension; j++) {
-				displayToken.setRow(i + theStartColumn);
-				displayToken.setColumn(j + theStartRow);
+				displayToken.setRow(i + theStartRow); //Edited this to properly shift the spreadsheet display
+				displayToken.setColumn(j + theStartColumn);
 				System.out.print(mySpreadsheetCells[i][j].getText());
 				if (viewValues && !(SPREADSHEET.getCellFormula(displayToken).equals(""))) {
 					mySpreadsheetCells[i][j].setText("" + SPREADSHEET.getCellValue(displayToken));
