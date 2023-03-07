@@ -14,9 +14,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.security.InvalidParameterException;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 
 import Cell.Tokens.CellToken;
 import Spreadsheet.Spreadsheet;
@@ -34,10 +35,13 @@ public class GUI {
     /** The JFrame. */
     private static final JFrame GUI = new JFrame("TCSS 342 Spreadsheet App");
 	
-	private static final int SIZE = 8;
+    /** The size of the spreadsheet. */
+	private static final int SIZE = 32;
 	
+	/** The n-by-n size of the spreadsheet display. */
 	private static final int MAX_DISPLAY = 8;
 	
+	/** The spreadsheet. */
 	private static final Spreadsheet SPREADSHEET = new Spreadsheet(SIZE);
 	
 	/** A ToolKit. */
@@ -53,10 +57,10 @@ public class GUI {
     private static final int SCREEN_HEIGHT = SCREEN_SIZE.height;
 	
     private JLabel cornerLabel = new JLabel();
-    private JLabel[] myRowLabels = new JLabel[SIZE];
-    private JLabel[] myColumnLabels = new JLabel[SIZE];
+    private JLabel[] myRowLabels;
+    private JLabel[] myColumnLabels;
     
-	private JButton[][] mySpreadsheetCells = new JButton[SIZE][SIZE];
+	private JButton[][] mySpreadsheetCells;
 	
 	private JMenuBar myMenuBar;
 	
@@ -68,7 +72,16 @@ public class GUI {
 	private JButton myUpButton;
 	private JButton myDownButton;
 	
+	private int mySSDimension = 0;
+	
+	private boolean viewValues = false;
+	
 	private final JMenuItem mClear = new JMenuItem("Clear");
+	
+	private final ButtonGroup myGroup = new ButtonGroup();
+	
+	private final JRadioButtonMenuItem mDisplayFormulas = new JRadioButtonMenuItem("Display Formulas");
+	private final JRadioButtonMenuItem mDisplayValues = new JRadioButtonMenuItem("Display Values");
 	
 	public GUI() {
 		start();
@@ -76,12 +89,21 @@ public class GUI {
 	
 	public void start() {
 		
+		if (SIZE < MAX_DISPLAY) {
+			mySSDimension = SIZE;
+		} else {
+			mySSDimension = MAX_DISPLAY;
+		}
+		
 		myMenuBar = new JMenuBar();
 		
-		final JPanel buttonPanel = new JPanel(new GridLayout(SIZE + 1, SIZE + 1));
+		JPanel buttonPanel = new JPanel(new GridLayout(mySSDimension + 1, mySSDimension + 1));
 		JPanel horizontalMovePanel = new JPanel();
 		JPanel verticalMovePanel = new JPanel();
 		
+		myRowLabels = new JLabel[mySSDimension];
+		myColumnLabels = new JLabel[mySSDimension];
+		mySpreadsheetCells = new JButton[mySSDimension][mySSDimension];
 		
 		myLeftButton = createMovementButton("🡐");
 		myRightButton = createMovementButton("🡒");
@@ -97,7 +119,7 @@ public class GUI {
 			myLeftButton.setEnabled(false);
 			myUpButton.setEnabled(false);
 		
-			if (SIZE >= MAX_DISPLAY) {
+			if (SIZE < MAX_DISPLAY) {
 				myRightButton.setEnabled(false);
 				myDownButton.setEnabled(false);
 			}
@@ -108,18 +130,18 @@ public class GUI {
 		verticalMovePanel.setAlignmentY(0);
 		
 		buttonPanel.add(cornerLabel);
-		for (int i = 0; i < SIZE; i++) {
+		for (int i = 0; i < mySSDimension; i++) {
 			myColumnLabels[i] = new JLabel("");
 			myColumnLabels[i].setHorizontalAlignment(JLabel.CENTER);
 			myColumnLabels[i].setVerticalAlignment(JLabel.BOTTOM);
 			buttonPanel.add(myColumnLabels[i]);
 		}
-		for (int i = 0; i < SIZE; i++) {
+		for (int i = 0; i < mySSDimension; i++) {
 			myRowLabels[i] = new JLabel("");
 			myRowLabels[i].setHorizontalAlignment(JLabel.CENTER);
 			myRowLabels[i].setVerticalAlignment(JLabel.CENTER);
 			buttonPanel.add(myRowLabels[i]);
-			for (int j = 0; j < SIZE; j++) {
+			for (int j = 0; j < mySSDimension; j++) {
 				mySpreadsheetCells[i][j] = createCellButton(i, j);
 				buttonPanel.add(mySpreadsheetCells[i][j]);
 			}
@@ -128,18 +150,43 @@ public class GUI {
 		relabel(myCurrentX, myCurrentY);
 		
 		
-		horizontalMovePanel.setAlignmentX(SIZE);
+		horizontalMovePanel.setAlignmentX(0);
 		
-		verticalMovePanel.setAlignmentY(SIZE);
+		verticalMovePanel.setAlignmentY(0);
 
 		final JMenu mHome = new JMenu("Home");
 		final JMenu mSSOptions = new JMenu("Spreadsheet");
 		final JMenu mCOptions = new JMenu("Cell");
+		final JMenu mDisplay = new JMenu("Display");
 		mClear.setEnabled(false);
 		final JMenuItem mCellEdit = new JMenuItem("Edit Formula...");
 		final JMenuItem mLoad = new JMenuItem("Load...");
         final JMenuItem mSave = new JMenuItem("Save...");
         final JMenuItem mExit = new JMenuItem("Exit");
+        
+    	final ButtonGroup myButtonGroup = new ButtonGroup();
+    	
+    	final JRadioButtonMenuItem mDisplayFormulas = new JRadioButtonMenuItem("Display Formulas");
+    	final JRadioButtonMenuItem mDisplayValues = new JRadioButtonMenuItem("Display Values");
+        
+    	myButtonGroup.add(mDisplayValues);
+    	myButtonGroup.add(mDisplayFormulas);
+    	
+    	mDisplayValues.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                viewValues = true;
+                relabel(myCurrentX, myCurrentY);
+            }
+        });
+    	
+    	mDisplayFormulas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+            	viewValues = false;
+                relabel(myCurrentX, myCurrentY);
+            }
+        });
         
         mLoad.addActionListener(new ActionListener() {
             @Override
@@ -174,10 +221,19 @@ public class GUI {
         myMenuBar.add(mCOptions);
         myMenuBar.add(mSSOptions);
         mHome.add(mExit);
+        
+        mDisplay.add(mDisplayFormulas);
+        mDisplay.add(mDisplayValues);
+        
+        mDisplayFormulas.setSelected(true);
+        
         mCOptions.add(mCellEdit);
+        mCOptions.add(mDisplay);
+        
         mSSOptions.add(mLoad);
         mSSOptions.add(mSave);
         mSSOptions.addSeparator();
+        
         mSSOptions.add(mClear);
         
 		GUI.setJMenuBar(myMenuBar);
@@ -196,36 +252,53 @@ public class GUI {
         
 	}
 	
+	/**
+	 * Relabels all the spreadsheet cells from given positions.
+	 * @param theStartColumn The first column in the visible spreadsheet cells.
+	 * @param theStartRow The first row in the visible spreadsheet cells.
+	 */
 	private void relabel(int theStartColumn, int theStartRow) {
 		CellToken displayToken = new CellToken();
-		for (int i = 0; i < SIZE; i++) {
+		for (int i = 0; i < mySSDimension; i++) {
 			myRowLabels[i].setText("" + (i + theStartRow + 1));
 			myColumnLabels[i].setText(generateColumnLabel(i + theStartColumn));
-			for (int j = 0; j < SIZE; j++) {
+		}
+		for (int i = 0; i < mySSDimension; i++) {
+			for (int j = 0; j < mySSDimension; j++) {
 				displayToken.setRow(i + theStartColumn);
 				displayToken.setColumn(j + theStartRow);
-				mySpreadsheetCells[i][j].setText(SPREADSHEET.printCellFormula(displayToken));
-				String cellID = (generateColumnLabel(i + myCurrentX) + (j + myCurrentY + 1));
+				System.out.print(mySpreadsheetCells[i][j].getText());
+				if (viewValues && !(SPREADSHEET.getCellFormula(displayToken).equals(""))) {
+					mySpreadsheetCells[i][j].setText("" + SPREADSHEET.getCellValue(displayToken));
+				} else {
+					mySpreadsheetCells[i][j].setText(SPREADSHEET.getCellFormula(displayToken));
+				}
 			}
 		}
 	}
 	
+	/**
+	 * Clears all values in the spreadsheet.
+	 */
 	private void clearSpreadsheet() {
 		CellToken clearToken = new CellToken();
 		String cellID = "";
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
+		for (int i = 0; i < mySSDimension; i++) {
+			for (int j = 0; j < mySSDimension; j++) {
 				clearToken.setRow(i);
 				clearToken.setColumn(j);
 				cellID = (generateColumnLabel(j) + (i + 1));
-				if (!(SPREADSHEET.printCellFormula(clearToken).equals(""))) {
-					SPREADSHEET.changeCellFormula(clearToken, "");
-				}
+				SPREADSHEET.changeCellFormula(clearToken, "");
 			}
 		}
 		relabel(myCurrentX, myCurrentY);
 	}
 	
+	/**
+	 * Generates a column ID from a column index value.
+	 * @param theColumn The column index
+	 * @return The column ID.
+	 */
 	private String generateColumnLabel(int theColumn) {	
 		theColumn++;
 		final String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -248,8 +321,8 @@ public class GUI {
 	}
 	
 	/**
-     * Creates a single button that 
-     * @param theName The row of the cell.
+     * Creates a single button that corresponds to a given cell in the spreadsheet.
+     * @param theRow The row of the cell.
      * @param theColumn The column of the cell.
      * @return the button.
      */
@@ -268,42 +341,65 @@ public class GUI {
         return button;
     }
     
+    /**
+     * Helper method to remotely edit a cell.
+     */
     private void remoteCellChangeHelper() {
     	CellToken remoteCellToken = new CellToken();
     	String s = "";
-    	while (s != null) {
+    	boolean exit = false;
+    	while (!exit) {
 			s = (String) JOptionPane.showInputDialog(GUI, "Input cell ID to edit:", 
 					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, 
 					s);
-			remoteCellToken = CellToken.getCellToken(s.toUpperCase());
-			if (remoteCellToken.getRow() > SIZE || remoteCellToken.getColumn() > SIZE) {
+			if (s == null) {
+				break;
+			} else {
+				try {
+					remoteCellToken = CellToken.getCellToken(s.toUpperCase());
+					exit = true;
+				} catch (Exception e) {
+					exit = false;
+					JOptionPane.showMessageDialog(GUI, e.getMessage(), 
+							"Error!", JOptionPane.ERROR_MESSAGE, null);
+				}	
+			}
+			if (remoteCellToken.getRow() == CellToken.BADCELL || remoteCellToken.getColumn() == CellToken.BADCELL) {
+				exit = false;
+				JOptionPane.showMessageDialog(GUI, "Invalid cell!", 
+						"Error!", JOptionPane.ERROR_MESSAGE, null);
+			}
+			else if (remoteCellToken.getRow() >= SIZE || remoteCellToken.getColumn() >= SIZE) {
+				exit = false;
 				JOptionPane.showMessageDialog(GUI, "Designated cell outside of spreadsheet bounds", 
 						"Error!", JOptionPane.ERROR_MESSAGE, null);
 			} else {
 				cellChangeHelper(remoteCellToken.getRow(), remoteCellToken.getColumn());
 				break;
 			}
-    	}
+		}
     }
     
     
     /**
-     * Helps display a cell change
-     * @param theRow
-     * @param theColumn
+     * Helper method to assist in changing the formula of a cell.
+     * @param theRow The row of the cell to change.
+     * @param theColumn The column of the cell to change.
      */
 	private void cellChangeHelper(int theRow, int theColumn) {
 		
 		CellToken cellToken = new CellToken();
-		
 		String cellID = (generateColumnLabel(theColumn + myCurrentX) + (theRow + myCurrentY + 1));
-		cellToken.setRow(theRow);
-		cellToken.setColumn(theColumn);
+		cellToken.setRow(theRow + myCurrentX);
+		cellToken.setColumn(theColumn + myCurrentY);
+		
+		System.out.println("Selected cell: " + cellID);
+		
 		boolean exit = false;
 		while (!exit) {
+			String former = SPREADSHEET.getCellFormula(cellToken);
 			String s = (String) JOptionPane.showInputDialog(GUI, "Change formula for cell " + cellID + ":", 
-					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, 
-					SPREADSHEET.printCellFormula(cellToken));
+					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, former);
 			if (s != null) {
 				exit = true;
 				try {
@@ -312,19 +408,19 @@ public class GUI {
 					mClear.setEnabled(true);
 				} catch (Exception e) {
 					exit = false;
-					SPREADSHEET.changeCellFormulaAndRecalculate(cellToken, "");
+					SPREADSHEET.changeCellFormulaAndRecalculate(cellToken, former);
 					JOptionPane.showMessageDialog(GUI, e.getMessage(), 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
 				}
 			} else {
+				System.out.println("null");
 				exit = true;
 			}
 		}
 	}
     
     /**
-     * Creates a single button that either opens, saves, or closes an image,
-     * depending on the button pressed on the bottom panel.
+     * Creates a single button that moves the spreadsheet in a given direction.
      * 
      * @param theName The label of the control panel button.
      * @return the button.
@@ -335,18 +431,51 @@ public class GUI {
         
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+			// Left movement
 				if (theText.equals("🡐")) {
-					myCurrentX -= SIZE;
+					myCurrentX -= mySSDimension;
+					myLeftButton.setEnabled(myCurrentX - mySSDimension > 0);
+					myRightButton.setEnabled(myCurrentX < SIZE);
+					
+					if (myCurrentX - mySSDimension < 0) {
+						myCurrentX = 0;
+					}
+					
+			// Right movement
 				} else if (theText.equals("🡒")) {
-					myCurrentX += SIZE;
+					myCurrentX += mySSDimension;
+					myLeftButton.setEnabled(myCurrentX > 0);
+					myRightButton.setEnabled(myCurrentX + mySSDimension < SIZE);
+					
+					if (myCurrentX + mySSDimension > SIZE) {
+						myCurrentX = SIZE - myCurrentX;
+					}
+					
+			// Up movement
 				} else if (theText.equals("🡑")) {
-					myCurrentY -= SIZE;
+					myCurrentY -= mySSDimension;
+					myUpButton.setEnabled(myCurrentY - mySSDimension > 0);
+					myDownButton.setEnabled(myCurrentY < SIZE);
+					
+					if (myCurrentY - mySSDimension < 0) {
+						myCurrentY = 0;
+					}
+					
+			// Down movement		
 				} else if (theText.equals("🡓")) {
-					myCurrentY += SIZE;
+					myCurrentY += mySSDimension;
+					myUpButton.setEnabled(myCurrentY > 0);
+					myDownButton.setEnabled(myCurrentY + mySSDimension < SIZE);
+					
+					if (myCurrentY + mySSDimension > SIZE) {
+						myCurrentY = SIZE - myCurrentY;
+					}
+					
 				}
+				
 				relabel(myCurrentX, myCurrentY);
-				myLeftButton.setEnabled(myCurrentX > 0);
-				myUpButton.setEnabled(myCurrentY > 0);
+				
 			}
             
         });

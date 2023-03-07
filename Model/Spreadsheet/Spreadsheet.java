@@ -47,7 +47,7 @@ public class Spreadsheet {
   /**
    *  prints the formula of a single cell
    */
-  public String printCellFormula(CellToken cellToken) {
+  public String getCellFormula(CellToken cellToken) {
 		String theFormula;
 		int row = cellToken.getRow(); //get the row.  
 		int column = cellToken.getColumn(); //get the column.
@@ -60,6 +60,18 @@ public class Spreadsheet {
 		return theFormula;
 	}
 
+  /**
+   *  prints the formula of a single cell
+   */
+  public int getCellValue(CellToken cellToken) {
+		int row = cellToken.getRow(); //get the row.  
+		int column = cellToken.getColumn(); //get the column.
+		if(cell[row][column] != null) {
+			return (cell[row][column].getValue()); //get the formula in that specific row and column.
+		} else {
+			return 0;
+		}
+	}
 
   /**
    *  print formulas of all the cells in the spreadsheet 

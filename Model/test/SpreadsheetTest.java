@@ -77,11 +77,11 @@ class SpreadsheetTest {
 
 		String expectedOutput = "1+3";
 
-		assertEquals(expectedOutput, testSpreadsheet.printCellFormula(cellTokenA1));
+		assertEquals(expectedOutput, testSpreadsheet.getCellFormula(cellTokenA1));
 	}
 
 	/**
-	 * Test method for {@link Spreadsheet#printCellFormula(CellToken)}.
+	 * Test method for {@link Spreadsheet#getCellFormula(CellToken)}.
 	 * Prints the cell formula at B2.
 	 */
 	@Test
@@ -91,7 +91,7 @@ class SpreadsheetTest {
 
 		String expectedOutput = "8-9";
 
-		assertEquals(expectedOutput, testSpreadsheet.printCellFormula(cellTokenB1));
+		assertEquals(expectedOutput, testSpreadsheet.getCellFormula(cellTokenB1));
 	}
 
 	/**
@@ -122,7 +122,7 @@ class SpreadsheetTest {
 
 		String expectedOutput = "4+2";
 
-		assertEquals(expectedOutput, testSpreadsheet.printCellFormula(cellTokenA1));
+		assertEquals(expectedOutput, testSpreadsheet.getCellFormula(cellTokenA1));
 
 	}
 

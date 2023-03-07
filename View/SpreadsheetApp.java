@@ -65,7 +65,7 @@ public class SpreadsheetApp {
             return;
         }
     
-        System.out.print(theSpreadsheet.printCellFormula(cellToken));
+        System.out.print(theSpreadsheet.getCellFormula(cellToken));
         System.out.println();
     }
     
