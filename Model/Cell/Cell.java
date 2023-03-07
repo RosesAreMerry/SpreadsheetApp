@@ -45,7 +45,7 @@ public class Cell {
     this.column = column;
   }
   
-  public void setFormula(String formula) {
+  public void setFormula(String formula) throws InvalidParameterException {
     this.formula = formula;
     postfixFormula = getFormula(formula);
   }
@@ -136,8 +136,10 @@ public class Cell {
    * level of precedence, grouping is from left to right.
    * 
    * This algorithm follows the algorithm described in Weiss, pages 105-108.
+   * 
+   * @throws InvalidParameterException if the formula is not a legal infix expression.
    */
-  public static Stack<Token> getFormula(String formula) {
+  public static Stack<Token> getFormula(String formula) throws InvalidParameterException {
     Stack<Token> returnStack = new Stack<Token>();  // stack of Tokens (representing a postfix expression)
     boolean error = false;
     char ch = ' ';
@@ -257,7 +259,7 @@ public class Cell {
     }
 
     if (error) {
-        // a parse error; throw a FormulaException
+        // a parse error; throw an InvalidParameterException
         throw new InvalidParameterException("Invalid formula: " + formula);
     }
     Stack<Token> temp = new Stack<Token>();

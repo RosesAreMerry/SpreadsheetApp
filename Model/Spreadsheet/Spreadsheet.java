@@ -1,5 +1,6 @@
 package Spreadsheet;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class Spreadsheet {
    * @param cellToken
    * @param formula
    */
-  public void changeCellFormula(CellToken celltoken, String formula) {
+  public void changeCellFormula(CellToken celltoken, String formula) throws InvalidParameterException {
 	  int row = celltoken.getRow(); 
 	  int column = celltoken.getColumn(); 
 	  //set the formula to new formula 
@@ -100,7 +101,7 @@ public class Spreadsheet {
   /**
    * @overload
    */
-  public void changeCellFormula(String cellToken, String formula) {
+  public void changeCellFormula(String cellToken, String formula) throws InvalidParameterException {
 	  CellToken newCellToken = CellToken.getCellToken(cellToken);
 	  changeCellFormula(newCellToken, formula);
 }
@@ -110,7 +111,7 @@ public class Spreadsheet {
  * @param cellToken
  * @param formula
  */
-  public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) {
+  public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) throws InvalidParameterException, RuntimeException {
 	  changeCellFormula(cellToken, formula);
 	  recalculateAll();
   }
@@ -118,7 +119,7 @@ public class Spreadsheet {
 	/**
 	 * Create a topological sort of the spreadsheet.
 	 */
-	public ArrayList<Cell> topologicalSort() {
+	public ArrayList<Cell> topologicalSort() throws RuntimeException {
 		Map<Cell, ArrayList<Cell>> topMap = new HashMap<Cell, ArrayList<Cell>>();
 
 		for (int i = 0; i < dimensions; i++) {
@@ -182,7 +183,7 @@ public class Spreadsheet {
 	 * Calculate the indegree
 	 */
 
-	private void recalculateAll() {
+	private void recalculateAll() throws RuntimeException {
 		ArrayList<Cell> sortedCells = topologicalSort();
 		// A topological sort will give us the cells that have no references first,
 		// And the cells that other cells depend on later.
