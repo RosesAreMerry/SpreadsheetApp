@@ -389,7 +389,7 @@ public class GUI {
 	private void cellChangeHelper(int theRow, int theColumn) {
 		
 		CellToken cellToken = new CellToken();
-		String cellID = (generateColumnLabel(theColumn + myCurrentX) + (theRow + myCurrentY + 1));
+		String cellID = (generateColumnLabel(theColumn + myCurrentY) + (theRow + myCurrentX + 1));//Edited this so the arrows move the spreadsheet correctly
 		cellToken.setRow(theRow + myCurrentX);
 		cellToken.setColumn(theColumn + myCurrentY);
 		
@@ -422,7 +422,7 @@ public class GUI {
     /**
      * Creates a single button that moves the spreadsheet in a given direction.
      * 
-     * @param theName The label of the control panel button.
+     * @param theText The label of the control panel button.
      * @return the button.
      */
     private JButton createMovementButton(String theText) {
