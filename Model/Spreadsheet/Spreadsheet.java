@@ -141,7 +141,9 @@ public class Spreadsheet {
 		}
 		for (Cell cell : topMap.keySet()) {
 			for (Cell dependency : topMap.get(cell)) {
-				indegree.put(dependency, indegree.get(dependency) + 1);
+				if (indegree.containsKey(dependency)) {
+					indegree.put(dependency, indegree.get(dependency) + 1);
+				}
 			}
 		}
 		// 3. Create a queue of all the cells with indegree 0
@@ -163,11 +165,13 @@ public class Spreadsheet {
 			sortedList.add(cell);
 			// 4c. For each of its dependencies:
 			for (Cell dependency : topMap.get(cell)) {
-				// 4c1. Decrement its indegree
-				indegree.put(dependency, indegree.get(dependency) - 1);
-				// 4c2. If its indegree is 0, add it to the queue
-				if (indegree.get(dependency) == 0) {
-					queue.add(dependency);
+				if (indegree.containsKey(dependency)) {
+					// 4c1. Decrement its indegree
+					indegree.put(dependency, indegree.get(dependency) - 1);
+					// 4c2. If its indegree is 0, add it to the queue
+					if (indegree.get(dependency) == 0) {
+						queue.add(dependency);
+					}
 				}
 			}
 		}
