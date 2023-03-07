@@ -14,6 +14,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.security.InvalidParameterException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -276,8 +277,8 @@ public class GUI {
 					s);
 			remoteCellToken = CellToken.getCellToken(s.toUpperCase());
 			if (remoteCellToken.getRow() > SIZE || remoteCellToken.getColumn() > SIZE) {
-				JOptionPane.showMessageDialog(GUI, "Cell outside of spreadsheet bounds!", 
-						"Cycle Detected!", JOptionPane.ERROR_MESSAGE, null);
+				JOptionPane.showMessageDialog(GUI, "Designated cell outside of spreadsheet bounds", 
+						"Error!", JOptionPane.ERROR_MESSAGE, null);
 			} else {
 				cellChangeHelper(remoteCellToken.getRow(), remoteCellToken.getColumn());
 				break;
@@ -312,8 +313,8 @@ public class GUI {
 				} catch (Exception e) {
 					exit = false;
 					SPREADSHEET.changeCellFormulaAndRecalculate(cellToken, "");
-					JOptionPane.showMessageDialog(GUI, e.getLocalizedMessage(), 
-							"Cycle Detected!", JOptionPane.ERROR_MESSAGE, null);
+					JOptionPane.showMessageDialog(GUI, e.getMessage(), 
+							"Error!", JOptionPane.ERROR_MESSAGE, null);
 				}
 			} else {
 				exit = true;
