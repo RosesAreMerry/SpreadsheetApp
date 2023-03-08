@@ -196,6 +196,8 @@ public class GUI {
 		final JMenuItem mLoad = new JMenuItem("Load...");
         final JMenuItem mSave = new JMenuItem("Save...");
         final JMenuItem mExit = new JMenuItem("Exit");
+        mCellEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+        
         mExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
         
         mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
