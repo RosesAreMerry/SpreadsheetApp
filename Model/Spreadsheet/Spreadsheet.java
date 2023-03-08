@@ -274,6 +274,27 @@ public class Spreadsheet {
     return cell[0].length;
   }
   
+  public String generateFile() {
+	  
+	  StringBuilder sb = new StringBuilder();
+	  
+	  sb.append(myDimensions);
+	  
+	  for (int row = 0; row < cell.length; row++) {
+		  for (int column = 0; column < cell[0].length; column++) {
+			  if (cell[row][column] != null) {
+				  sb.append("\n");
+				  sb.append(generateColumnLabel(column));
+				  sb.append(row + 1);
+				  sb.append(';');
+				  sb.append(cell[row][column].getFormula());
+			  }
+		  }
+	  }
+	  
+	  return sb.toString();
+  }
+  
   /**
    * Returns a Spreadsheet object from a given file.
    * @param theFile The file to load the spreadsheet from.
@@ -290,8 +311,8 @@ public class Spreadsheet {
 	  	while (scan.hasNext()) {
 	  		String cellData = scan.nextLine();
 			int seperationIndex = cellData.indexOf(';');
-			String cellID = cellData.substring(0, seperationIndex);
-			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
+			String cellID = cellData.substring(0, seperationIndex).toUpperCase();
+			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length()).toUpperCase();
 			returnSpreadsheet.changeCellFormula(cellID, cellFormula);
 	  	}
 
@@ -301,5 +322,32 @@ public class Spreadsheet {
 
 	  	return returnSpreadsheet;
   }
+  
+  /**
+	 * Generates a column ID from a column index value.
+	 * @param theColumn The column index
+	 * @return The column ID.
+	 */
+	public static String generateColumnLabel(int theColumn) {	
+		theColumn++;
+		final String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int base = 1;
+		int power = 0;
+		String cellID = "";
+		while (theColumn >= base) {
+			power++;
+			int count = (int) Math.pow(alphanumeric.length(), power - 1);
+			int index = (((theColumn - 1) / count) + alphanumeric.length());
+			if (power > 1) {
+				index--;
+			}
+			index %= alphanumeric.length();
+			cellID = alphanumeric.substring(index, index+1) + cellID;
+			count *= alphanumeric.length();
+			base += count;
+		}
+		return cellID;
+	}
+  
   
 }

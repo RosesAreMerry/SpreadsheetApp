@@ -273,6 +273,15 @@ public class GUI {
         
 		final JMenuItem mSave = new JMenuItem("Save...");
         mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        mSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+            	System.out.println("///// BEGIN FILE GENERATION /////");
+            	System.out.println(mySpreadsheet.generateFile());
+                System.out.println("///// END FILE GENERATION /////");
+                System.out.println("\n");
+            }
+        });
         mSave.setEnabled(spreadsheetLoaded);
               
         final JMenuItem mExit = new JMenuItem("Exit");
@@ -385,6 +394,34 @@ public class GUI {
     }
 	
 	/**
+	 * Helper method to save a spreadsheet.
+	 */
+	private void saveFileHelper() {
+//		int result = 0;
+//		boolean exit = false;
+//		List<String> allFileLines = new ArrayList<String>();
+//		while (result != JFileChooser.CANCEL_OPTION && !exit){
+//			result = myFileChooser.showOpenDialog(GUI);
+//			if (result == JFileChooser.APPROVE_OPTION) {
+//				try {
+//					exit = true;
+//					File data = myFileChooser.getSelectedFile();			
+//					GUI.setTitle("TCSS 342 Spreadsheet App - " + data);
+//					
+//					myTestSpreadsheet = Spreadsheet.generateLoadedSpreadsheet(data);
+//					
+//				} catch (Exception e) {
+//					exit = false;
+//					JOptionPane.showMessageDialog(GUI, "Invalid spreadsheet file", 
+//							"Error!", JOptionPane.ERROR_MESSAGE, null);
+//				}
+//			}
+//		}
+//		if (exit) {
+//		}
+	}
+	
+	/**
 	 * Helper method to load a spreadsheet.
 	 */
 	private void loadFileHelper() {
@@ -440,7 +477,7 @@ public class GUI {
 		CellToken displayToken = new CellToken();
 		for (int i = 0; i < mySSDimension; i++) {
 			myRowLabels[i].setText("" + (i + theStartRow + 1));
-			myColumnLabels[i].setText(generateColumnLabel(i + theStartColumn));
+			myColumnLabels[i].setText(Spreadsheet.generateColumnLabel(i + theStartColumn));
 		}
 		for (int i = 0; i < mySSDimension; i++) {
 			for (int j = 0; j < mySSDimension; j++) {
@@ -453,32 +490,6 @@ public class GUI {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * Generates a column ID from a column index value.
-	 * @param theColumn The column index
-	 * @return The column ID.
-	 */
-	private String generateColumnLabel(int theColumn) {	
-		theColumn++;
-		final String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		int base = 1;
-		int power = 0;
-		String cellID = "";
-		while (theColumn >= base) {
-			power++;
-			int count = (int) Math.pow(alphanumeric.length(), power - 1);
-			int index = (((theColumn - 1) / count) + alphanumeric.length());
-			if (power > 1) {
-				index--;
-			}
-			index %= alphanumeric.length();
-			cellID = alphanumeric.substring(index, index+1) + cellID;
-			count *= alphanumeric.length();
-			base += count;
-		}
-		return cellID;
 	}
 	
 	/**
@@ -547,7 +558,7 @@ public class GUI {
 		boolean exit = false;
 		while (!exit) {
 			CellToken cellToken = new CellToken();
-			String cellID = (generateColumnLabel(theColumn) + (theRow + 1));//Edited this so the arrows move the spreadsheet correctly
+			String cellID = (Spreadsheet.generateColumnLabel(theColumn) + (theRow + 1));//Edited this so the arrows move the spreadsheet correctly
 			cellToken.setRow(theRow);
 			cellToken.setColumn(theColumn);
 			String former = mySpreadsheet.getCellFormula(cellToken);
