@@ -24,7 +24,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Cell.Tokens.CellToken;
 import Spreadsheet.Spreadsheet;
@@ -48,7 +51,7 @@ import Spreadsheet.Spreadsheet;
 public class GUI {
 	
     /** The JFrame. */
-    private static final JFrame GUI = new JFrame("TCSS 342 Spreadsheet App");
+    private static final JFrame GUI = new JFrame();
 	
 	/** The n-by-n size of the spreadsheet display. */
 	private static final int MAX_DISPLAY = 7;
@@ -70,6 +73,10 @@ public class GUI {
 	
     /** File chooser object to initialize at the current directory. */
     private final JFileChooser myFileChooser = new JFileChooser("."); 
+    
+    /** Filter to only loading/saving text files. */
+    private FileNameExtensionFilter myFileFilter = new FileNameExtensionFilter(
+            "Text Files (.txt)", "txt");
     
     /** Label to put in the corner of the spreadsheet display. */
     private final JLabel cornerLabel = new JLabel();
@@ -123,6 +130,9 @@ public class GUI {
 	/** The label that gives instructions upon application launch. */
 	private JLabel myInstructions;
 	
+	/** The name of the spreadsheet. */
+	private String mySpreadsheetName = "";
+	
 	/** The button group to contain the radio display buttons. */
 	private final ButtonGroup myGroup = new ButtonGroup();
 	
@@ -141,6 +151,8 @@ public class GUI {
 	 * Adds all the proper components to the 
 	 */
 	public void start() {
+		
+		myFileChooser.setFileFilter(myFileFilter);
 		
 		if (spreadsheetLoaded) {
 			
@@ -222,13 +234,11 @@ public class GUI {
 			myInstructions.setVerticalAlignment(0);
 		}
 		
-		mClear.setEnabled(false);
 		mClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
             	mySpreadsheet.clear();
         		relabel(myCurrentX, myCurrentY);
-                mClear.setEnabled(false);
             }
         });
 		
@@ -256,9 +266,10 @@ public class GUI {
 		final JMenuItem mNew = new JMenuItem("New...");
 		mNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
         mNew.addActionListener(new ActionListener() {
+        	
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
-                newSpreadsheetHelper();
+            	newSpreadsheetHelper();
             }
         });
 		
@@ -276,10 +287,7 @@ public class GUI {
         mSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
-            	System.out.println("///// BEGIN FILE GENERATION /////");
-            	System.out.println(mySpreadsheet.generateFile());
-                System.out.println("///// END FILE GENERATION /////");
-                System.out.println("\n");
+                saveFileHelper();
             }
         });
         mSave.setEnabled(spreadsheetLoaded);
@@ -339,6 +347,7 @@ public class GUI {
         
         mSSOptions.add(mClear);
 		
+        GUI.setTitle("TCSS 342 Spreadsheet App" + mySpreadsheetName);
 		GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GUI.setSize(new Dimension(3 * SCREEN_WIDTH / 5, 2 * SCREEN_HEIGHT / 3));
 		GUI.setLocationRelativeTo(null);
@@ -347,6 +356,7 @@ public class GUI {
 	
 	private void newSpreadsheetHelper() {
     	String s = "";
+    	boolean enter = false;
     	boolean exit = false;
     	Spreadsheet myTestSpreadsheet = null;
     	int dimension = 0;
@@ -357,7 +367,6 @@ public class GUI {
 			if (s != null) {
 				try {
 					dimension = Integer.valueOf(s);
-					System.out.println("New spreadsheet length: " + dimension);
 					exit = true;
 					if (dimension < 1) {
 						exit = false;
@@ -384,6 +393,7 @@ public class GUI {
 				GUI.remove(myInstructions);
 			}
 			
+			mySpreadsheetName = " - New Spreadsheet";
 			mySpreadsheet = myTestSpreadsheet;
 			
 			myCurrentX = 0;
@@ -397,28 +407,43 @@ public class GUI {
 	 * Helper method to save a spreadsheet.
 	 */
 	private void saveFileHelper() {
-//		int result = 0;
-//		boolean exit = false;
-//		List<String> allFileLines = new ArrayList<String>();
-//		while (result != JFileChooser.CANCEL_OPTION && !exit){
-//			result = myFileChooser.showOpenDialog(GUI);
-//			if (result == JFileChooser.APPROVE_OPTION) {
-//				try {
-//					exit = true;
-//					File data = myFileChooser.getSelectedFile();			
-//					GUI.setTitle("TCSS 342 Spreadsheet App - " + data);
-//					
-//					myTestSpreadsheet = Spreadsheet.generateLoadedSpreadsheet(data);
-//					
-//				} catch (Exception e) {
-//					exit = false;
-//					JOptionPane.showMessageDialog(GUI, "Invalid spreadsheet file", 
-//							"Error!", JOptionPane.ERROR_MESSAGE, null);
-//				}
-//			}
-//		}
-//		if (exit) {
-//		}
+		int result = 0;
+		boolean exit = false;
+		List<String> allFileLines = new ArrayList<String>();
+		while (result != JFileChooser.CANCEL_OPTION && !exit){
+			result = myFileChooser.showSaveDialog(GUI);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				boolean save = false;
+				try {
+					exit = true;
+					File data = myFileChooser.getSelectedFile();
+					if (data.exists()) {
+	                    int resultOverwrite = JOptionPane.showConfirmDialog(null, 
+	                            "This file already exists. Overwrite?", 
+	                            "Overwrite", 
+	                            JOptionPane.OK_CANCEL_OPTION);
+	                    if (resultOverwrite == JOptionPane.OK_OPTION) {
+	                    	save = true;
+	                    } else {
+	                    	exit = false;
+	                    }
+	                } else {
+	                	save = true;
+	                }
+					if (save) {
+						String filePath = data.getAbsolutePath();
+						BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+						writer.write(mySpreadsheet.generateFile());
+						writer.close();
+						GUI.setTitle("TCSS 342 Spreadsheet App - " + data); 
+					}
+				} catch (Exception e) {
+					exit = false;
+					JOptionPane.showMessageDialog(GUI, "Invalid save", 
+							"Error!", JOptionPane.ERROR_MESSAGE, null);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -428,18 +453,19 @@ public class GUI {
 		int result = 0;
 		Spreadsheet myTestSpreadsheet = null;
 		boolean exit = false;
+		File data = null;
 		List<String> allFileLines = new ArrayList<String>();
 		while (result != JFileChooser.CANCEL_OPTION && !exit){
 			result = myFileChooser.showOpenDialog(GUI);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				try {
 					exit = true;
-					File data = myFileChooser.getSelectedFile();			
-					GUI.setTitle("TCSS 342 Spreadsheet App - " + data);
+					data = myFileChooser.getSelectedFile();			
 					
 					myTestSpreadsheet = Spreadsheet.generateLoadedSpreadsheet(data);
 					
 				} catch (Exception e) {
+					mySpreadsheetName = "";
 					exit = false;
 					JOptionPane.showMessageDialog(GUI, "Invalid spreadsheet file", 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
@@ -457,6 +483,7 @@ public class GUI {
 				GUI.remove(myInstructions);
 			}
 			
+			mySpreadsheetName = (" - " + data);
 			mySpreadsheet = myTestSpreadsheet;
 			
 			myCurrentX = 0;
@@ -570,7 +597,6 @@ public class GUI {
 				try {
 					mySpreadsheet.changeCellFormulaAndRecalculate(cellToken, s.toUpperCase());
 					relabel(myCurrentX, myCurrentY);
-					mClear.setEnabled(true);
 				} catch (Exception e) {
 					exit = false;
 					mySpreadsheet.changeCellFormulaAndRecalculate(cellToken, former);
