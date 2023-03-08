@@ -1,14 +1,18 @@
-package Spreadsheet;
-import java.io.File;
-import java.io.FileNotFoundException;
-/**
- * 
+/*
+ * This is a spreadsheet class that that has various functionalities 
  */
+
+/**
+ * a spreadsheet class has various functionalities 
+ * @author malihahossain 
+ * @version 8th March 2023
+ */
+package Spreadsheet;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.function.Function;
 import Cell.Cell;
 import Cell.Tokens.CellToken;
@@ -16,7 +20,7 @@ import Cell.Tokens.CellToken;
 public class Spreadsheet {
 	//two dimensional array of cells
 	private Cell[][] cell;
-	private static int dimensions;;
+	private static int myDimensions;
 	private Function<CellToken, Cell> lookupCell = (c) -> {
 		return cell[c.getRow()][c.getColumn()];
 		};
@@ -28,7 +32,7 @@ public class Spreadsheet {
  *  @param dimension
 **/
   public Spreadsheet(int dimensions) {
-	  Spreadsheet.dimensions= dimensions;
+	  Spreadsheet.myDimensions= dimensions;
 	  cell = new Cell[dimensions][dimensions];
   }
   
@@ -36,8 +40,8 @@ public class Spreadsheet {
    * Clears the spreadsheet.
    */
   public void clear() {
-	  for (int i = 0; i < dimensions; i++) {
-		  for (int j = 0; j < dimensions; j++) {
+	  for (int i = 0; i < myDimensions; i++) {
+		  for (int j = 0; j < myDimensions; j++) {
 			  if (cell[i][j] != null) {
 				  cell[i][j] = null;
 			  }
@@ -48,11 +52,12 @@ public class Spreadsheet {
   
  /**
   *  prints the values of a cell
+  *  @returns the string
   */
   public String printValues() {
 	  StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < dimensions; i++) {
-			for (int j = 0; j < dimensions; j++) {
+		for (int i = 0; i < myDimensions; i++) {
+			for (int j = 0; j < myDimensions; j++) {
 				char column = (char) (j % 26 + 65);
 				if (cell[i][j] != null) {
 					sb.append(column).append(i+1).append(": ").append(cell[i][j].getValue()).append(" ");
@@ -66,7 +71,7 @@ public class Spreadsheet {
   }
 
   /**
-   * prints the formula of a single cell
+   * gets the formula of a single cell
    * @param cellToken
    */
   public String getCellFormula(CellToken cellToken) {
@@ -82,27 +87,28 @@ public class Spreadsheet {
 		return theFormula;
 	}
 
-  /**
-   *  prints the formula of a single cell
-   */
+ /**
+  * prints the formula of a single cell
+  * @param cellToken
+ */
   public int getCellValue(CellToken cellToken) {
 		int row = cellToken.getRow(); //get the row.  
 		int column = cellToken.getColumn(); //get the column.
 		if(cell[row][column] != null) {
-			return (cell[row][column].getValue()); //get the formula in that specific row and column.
+			return (cell[row][column].getValue()); //get the formula in that specific row and column and return
 		} else {
 			return 0;
 		}
 	}
 
   /**
-   *  print formulas of all the cells in the spreadsheet 
-   *  @return string
+   * print formulas of all the cells in the spreadsheet 
+   * @return string
    */
   public String printAllFormulas(){	  
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < dimensions; i++) {
-			for (int j = 0; j < dimensions; j++) {
+		for (int i = 0; i < myDimensions; i++) {
+			for (int j = 0; j < myDimensions; j++) {
 				char column = (char) (j % 26 + 65);
 				if (cell[i][j] != null) {
 					sb.append(column).append(i+1).append(": ").append(cell[i][j].getFormula()).append(" ");
@@ -116,7 +122,7 @@ public class Spreadsheet {
 }
   
   /**
-   * changes the cell formula to a new formula.
+   * Sets the current cellFomula to a new cellformula
    * @param celltoken
    * @param formula
    */
@@ -134,7 +140,10 @@ public class Spreadsheet {
 	  }
 }
   /**
-   * @overload
+   * 
+   * @param cellToken- a cellToken of type string
+   * @param formula- a formula of type string
+   * @throws InvalidParameterException
    */
   public void changeCellFormula(String cellToken, String formula) throws InvalidParameterException {
 	  CellToken newCellToken = CellToken.getCellToken(cellToken);
@@ -156,9 +165,10 @@ public class Spreadsheet {
    * @param stringToken
    * @param formula
    */
-    public void changeCellFormulaAndRecalculate(String stringToken, String formula) throws InvalidParameterException, RuntimeException {
+  public void changeCellFormulaAndRecalculate(String stringToken, String formula) throws InvalidParameterException, RuntimeException {
   	  changeCellFormula(stringToken, formula);
-    }
+  	  recalculateAll();
+ }
   
 	/**
 	 * Create a topological sort of the spreadsheet.
@@ -167,8 +177,8 @@ public class Spreadsheet {
 	public ArrayList<Cell> topologicalSort() throws RuntimeException {
 		Map<Cell, ArrayList<Cell>> topMap = new HashMap<Cell, ArrayList<Cell>>();
 
-		for (int i = 0; i < dimensions; i++) {
-			for (int j = 0; j < dimensions; j++) {
+		for (int i = 0; i < myDimensions; i++) {
+			for (int j = 0; j < myDimensions; j++) {
 				Cell thisCell = cell[i][j];
 				if (thisCell != null) {
 					topMap.put(thisCell, thisCell.getDependencies());
@@ -230,6 +240,7 @@ public class Spreadsheet {
 
 	/**
 	 * Calculate the indegree
+	 * @throws RuntimeException
 	 */
 
 	private void recalculateAll() throws RuntimeException {
@@ -246,46 +257,17 @@ public class Spreadsheet {
 	}
   
   /**
-   * returns the number of rows in the spreadsheet 
+   * @return the number of rows in the spreadsheet 
+   * 
    */
   public int getNumRows() {
     return cell.length;
   }
  /**
-  * returns the number of columns in the spreadsheet 
-  * @return
+  * @return the number of columns in the spreadsheet
   */
   public int getNumColumns() {
     
     return cell[0].length;
   }
-  
-  /**
-   * Returns a Spreadsheet object from a given file.
-   * @param theFile
-   */
-  public static Spreadsheet generateLoadedSpreadsheet(File theFile) throws FileNotFoundException {
-	  	
-	  	Scanner scan = new Scanner(theFile);
-	  	
-	  	dimensions = Integer.valueOf(scan.nextLine());
-	  	
-	  	Spreadsheet returnSpreadsheet = new Spreadsheet(dimensions);
-		
-	  	while (scan.hasNext()) {
-	  		String cellData = scan.nextLine();
-			int seperationIndex = cellData.indexOf(';');
-			String cellID = cellData.substring(0, seperationIndex);
-			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
-			returnSpreadsheet.changeCellFormula(cellID, cellFormula);
-	  	}
-	  	
-	  	scan.close();
-	  	
-	  	returnSpreadsheet.recalculateAll();
-  		
-	  	return returnSpreadsheet;
-  }
-  
-  
 }
