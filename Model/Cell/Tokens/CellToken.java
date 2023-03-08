@@ -25,7 +25,6 @@ public class CellToken extends Token {
   /**
    *  Given a CellToken, print it out as it appears on the
    *  spreadsheet (e.g., "A3")
-   *  @param cellToken  a CellToken
    *  @return  the cellToken's coordinates
    */
   public String printCellToken () {
