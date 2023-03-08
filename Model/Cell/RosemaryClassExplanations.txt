@@ -1,0 +1,33 @@
+Technical Summary
+Cell.java
+
+This class represents a cell in the spreadsheet. It has a value and a formula. The value is the result of the formula. The formula is a string that is parsed into a stack of Token objects.
+
+Functions that require explanation:
+
+getDependencies() - returns a list of cells that this cell depends on. This is used for the topological sort.
+
+getFormula() - This is a static function that takes a string and returns a stack of Tokens. This is used to parse the formula. There is some nuance to the way it does this so that the recalculate() function has an easier time of things. It handles cases where the - operator is used as a unary operator, and it handles cases where the - operator is used as a binary operator by checking if the previous token was a value or not. It also handles cases where a bad input of multiple value tokens are placed next to each other. It also reverses the stack at the end so that it can be read easier by the recalculate() function.
+
+recalculate() - This function uses the stack of tokens provided by the getFormula() function and calculates the value of the cell. It uses another stack to do this. It pops the top token off the stack and if it is a value, it pushes it onto the value stack. If it is an operator, it pops the top two values off the value stack, performs the operation, and pushes the result onto the formula stack. It does this until the formula stack has one value in it. A correct formula will also have an empty value stack at this point, but the expression parsing in getFormula() should have already thrown a bad formula at this point if that were true.
+
+Token.java
+
+This class and all its subclasses represent a token in the formula. It is used to parse the formula into a stack of tokens. Most of them don't require much explanation, as they are essentially just data containers. The only one that requires explanation is the Operator class. 
+
+OperatorToken.java
+
+Operator has a static function that takes a string and returns an Operator object. It also has a static function that takes an operator and returns its precedence. This is used by the getFormula() function in Cell.java to determine the order of operations.
+
+CellToken.java
+
+The CellToken class has a static function to get a cell token from a string. Other than that it simply contains the row and column numbers.
+
+LiteralToken.java
+
+Just a container for a literal value.
+
+topologicalSort() - This function heavily uses the java collections library. It follows the steps that were described in class to do a topological sort. To do this, it begins by initializing a HashMap and iterating through the spreadsheet to find non-null values. When it does, it puts their Cell as the key and their dependencies as the value in the map. It then iterates through this map and uses it to calculate the indegree of each cell. This is stored in a new HashMap. The cells with an indegree of 0 are added to a queue. Then, each element in the queue is added to an ArrayList and their dependencies are iterated through. The indegree of each dependency is decremented by 1. If the indegree of a dependency is 0, it is added to the queue. This process is repeated until the queue is empty. If the size of the ArrayList is not equal to the number of non-null cells, then there is a cycle in the graph and the spreadsheet is invalid. If there is no cycle, the ArrayList is returned and the spreadsheet is valid.
+
+Reasoning through the big O of this algorithm, we start by iterating over the whole array to find values. So it is at least O(n) where n is the size of the array. We could store all non null values in their own array. This would make this step take O(V) time which is much better, but I also doubt this is required (since a 2-dimensional array is suggested for this project.)
+So after this, we iterate over the edges of the graph to calculate the indegree of each cell. This is O(E) where E is the number of edges in the graph. We then deal with the queue, which will do operations for each vertex and each edge in the graph. So this is O(V + E). So the total time complexity is O(n + V + E). Technically this is larger than the V+E of topological sort, but in reality the O(n) time comes from making the directed graph in the first place, which isn't really part of the algorithm, and it's only a null check, which is quite cheap.

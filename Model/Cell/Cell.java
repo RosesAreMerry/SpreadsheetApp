@@ -11,7 +11,11 @@ import Cell.Tokens.LiteralToken;
 import Cell.Tokens.OperatorToken;
 import Cell.Tokens.Token;
 
-
+/**
+ * The Cell class handles keeping the function of a cell and calculating its value.
+ * To calculate the value of a cell, it uses a postfix formula provided by the function getFormula.
+ * @author Rosemary
+ */
 public class Cell {
 
   private int row;
