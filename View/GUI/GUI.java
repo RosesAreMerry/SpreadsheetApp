@@ -518,7 +518,6 @@ public class GUI {
 		}
     }
     
-    
     /**
      * Helper method to assist in changing the formula of a cell.
      * @param theColumn The column of the cell to change.
