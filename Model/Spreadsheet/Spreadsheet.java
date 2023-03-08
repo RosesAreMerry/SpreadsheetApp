@@ -280,6 +280,8 @@ public class Spreadsheet {
 			returnSpreadsheet.changeCellFormula(cellID, cellFormula);
 	  	}
 	  	
+	  	scan.close();
+	  	
 	  	returnSpreadsheet.recalculateAll();
   		
 	  	return returnSpreadsheet;
