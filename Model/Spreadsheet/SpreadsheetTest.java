@@ -2,7 +2,7 @@
  * TCSS 342 Assignment 6B - Spreadsheet App
  */
 
-// I'm not sure if this breaks the code on anyone else's end but
+// I'm not sure if this breaks the code on anyone else's end, but
 // I had to change "Model.test" to "test" to get the code to run on
 // my end. 
 // - Jacob Erickson
@@ -206,7 +206,7 @@ class SpreadsheetTest {
 	void testTopologicalCycle() {
 		testSpreadsheet.changeCellFormula(cellTokenA1, "A2");
 
-		assertThrows(RuntimeException.class, 
+		assertThrows(RuntimeException.class,
 		() -> {
 			testSpreadsheet.changeCellFormulaAndRecalculate(cellTokenA2, "A1");
 		});

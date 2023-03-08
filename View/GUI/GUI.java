@@ -6,6 +6,7 @@ package GUI;
  * Jacob Erickson
  */
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -68,7 +69,7 @@ public class GUI {
      */
     private final JFileChooser myFileChooser = new JFileChooser("."); 
     
-    private JLabel cornerLabel = new JLabel();
+    private final JLabel cornerLabel = new JLabel();
     private JLabel[] myRowLabels;
     private JLabel[] myColumnLabels;
     
