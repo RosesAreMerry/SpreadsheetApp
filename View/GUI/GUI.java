@@ -1,14 +1,20 @@
-package GUI;
-/**
+
+/*
  * GUI Class
  * TCSS 342 - HW 6b
  * 3/6/2023
  * Jacob Erickson
  */
 
+/**
+ * A class to display and alter the Spreadsheet and its contents.
+ * @author Jacob Erickson
+ * @version 2023.3.8 
+ */
+
+package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -21,7 +27,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -45,9 +50,6 @@ public class GUI {
     /** The JFrame. */
     private static final JFrame GUI = new JFrame("TCSS 342 Spreadsheet App");
 	
-    /** The size of the spreadsheet. */
-	private int mySize = 0;
-	
 	/** The n-by-n size of the spreadsheet display. */
 	private static final int MAX_DISPLAY = 7;
 	
@@ -66,50 +68,78 @@ public class GUI {
     /** The height of the screen. */
     private static final int SCREEN_HEIGHT = SCREEN_SIZE.height;
 	
-    /**
-     * File chooser object to initialize at the current directory.
-     */
+    /** File chooser object to initialize at the current directory. */
     private final JFileChooser myFileChooser = new JFileChooser("."); 
     
+    /** Label to put in the corner of the spreadsheet display. */
     private final JLabel cornerLabel = new JLabel();
+    
+    /** Array of labels to denote the rows. */
     private JLabel[] myRowLabels;
+    
+    /** Array of labels to denote the columns. */
     private JLabel[] myColumnLabels;
     
+    /** Array of buttons to act as the interactive cells. */
 	private JButton[][] mySpreadsheetCells;
 	
+	/** The menu bar. */
 	private JMenuBar myMenuBar;
 	
+    /** The size of the spreadsheet. */
+	private int mySize;
+	
+	/** Coordinates of what position the top left cell in the spreadsheet display indicates. */
 	private int myCurrentX = 0;
 	private int myCurrentY = 0;
 	
+	/** Directional spreadsheet movement buttons. */
 	private JButton myLeftButton;
 	private JButton myRightButton;
 	private JButton myUpButton;
 	private JButton myDownButton;
 	
+	/** Indicates the number of rows and columns in the spreadsheet. */
 	private int mySSDimension = 0;
 	
+	/** Determines whether or not to show the values or the formulas of each cell. */
 	private boolean viewValues = false;
 	
+	/** Determines whether or not a spreadsheet has been loaded into the program yet. */
 	private boolean spreadsheetLoaded = false;
 	
+	/** Clear button. */
 	private final JMenuItem mClear = new JMenuItem("Clear");
 	
+	/** The panel to contain the cell buttons. */
 	private JPanel myButtonPanel;
+	
+	/** The panel to contain the left/right movement buttons. */
 	private JPanel myHorizontalMovePanel;
+	
+	/** The panel to contain the left/right movement buttons. */
 	private JPanel myVerticalMovePanel;
 	
+	/** The label that gives instructions upon application launch. */
 	private JLabel myInstructions;
 	
+	/** The button group to contain the radio display buttons. */
 	private final ButtonGroup myGroup = new ButtonGroup();
 	
+	/** Radio buttons to toggle between displaying formulas and displaying calculated values. */
 	private final JRadioButtonMenuItem mDisplayFormulas = new JRadioButtonMenuItem("Display Formulas");
 	private final JRadioButtonMenuItem mDisplayValues = new JRadioButtonMenuItem("Display Values");
 	
+	/**
+	 * Calls the start method to initialize the GUI with its components.
+	 */
 	public GUI() {
 		start();
 	}
 	
+	/**
+	 * Adds all the proper components to the 
+	 */
 	public void start() {
 		
 		if (spreadsheetLoaded) {
