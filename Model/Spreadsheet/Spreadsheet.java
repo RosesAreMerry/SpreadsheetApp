@@ -136,7 +136,7 @@ public class Spreadsheet {
   public void changeCellFormula(String cellToken, String formula) throws InvalidParameterException {
 	  CellToken newCellToken = CellToken.getCellToken(cellToken);
 	  changeCellFormula(newCellToken, formula);
-}
+  }
   
 /**
  * changes the cell formula and recalculates the values of the spreadsheet.   
@@ -148,6 +148,15 @@ public class Spreadsheet {
 	  recalculateAll();
   }
 
+  /**
+   * changes the cell formula and recalculates the values of the spreadsheet.   
+   * @param stringToken
+   * @param formula
+   */
+    public void changeCellFormulaAndRecalculate(String stringToken, String formula) throws InvalidParameterException, RuntimeException {
+  	  changeCellFormula(stringToken, formula);
+    }
+  
 	/**
 	 * Create a topological sort of the spreadsheet.
 	 * @return sorted Arraylist according to their topological order

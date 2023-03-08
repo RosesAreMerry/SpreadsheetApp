@@ -2,7 +2,7 @@
  * TCSS 342 Winter 2023 - Assignment 6B Spreadsheet App
  */
 
-package Model.Cell;
+package Cell;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

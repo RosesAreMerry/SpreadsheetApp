@@ -111,7 +111,6 @@ public class GUI {
 	public void start() {
 		
 		if (spreadsheetLoaded) {
-			mySpreadsheet = new Spreadsheet(mySize);
 			
 			if (mySize < MAX_DISPLAY) {
 				mySSDimension = mySize;
@@ -179,6 +178,9 @@ public class GUI {
 			
 			myButtonPanel.setAlignmentX(0);
 			myButtonPanel.setAlignmentY(0);
+			
+			relabel(myCurrentX, myCurrentY);
+			
 		} else {
 			myInstructions = new JLabel("Load a new spreadsheet (Home > Load...) or create a new spreadsheet (Home > New...) to get started!");
 			GUI.add(myInstructions, BorderLayout.CENTER);
@@ -288,8 +290,6 @@ public class GUI {
 		GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GUI.setSize(new Dimension(3 * SCREEN_WIDTH / 5, 2 * SCREEN_HEIGHT / 3));
 		GUI.setLocationRelativeTo(null);
-        
-		relabel(myCurrentX, myCurrentY);
 		
 		GUI.setVisible(true);
         
@@ -304,34 +304,43 @@ public class GUI {
 				try {
 					exit = true;
 					File data = myFileChooser.getSelectedFile();
-					Scanner scan = new Scanner(data);
-					scan.useDelimiter("\n");
-					
+					Scanner scan = new Scanner(data);				
 					GUI.setTitle("TCSS 342 Spreadsheet App - " + data);
-					
-					mySize = Integer.valueOf(scan.next());
-					
-					scan.close();
-					
-					if (spreadsheetLoaded) {
-						GUI.remove(myButtonPanel);
-						GUI.remove(myHorizontalMovePanel);
-						GUI.remove(myVerticalMovePanel);
-					} else {
-						spreadsheetLoaded = true;
-						GUI.remove(myInstructions);
+					String next = scan.nextLine();
+					System.out.println(next);
+					System.out.println("////////");
+					mySize = Integer.valueOf(next);
+					mySpreadsheet = new Spreadsheet(mySize);
+					while (scan.hasNext()) {
+						String cellData = scan.nextLine();
+						int seperationIndex = cellData.indexOf(';');
+						String cellID = cellData.substring(0, seperationIndex);
+						String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
+						System.out.println("Location: {" + cellID + "}, Formula: {" + cellFormula + "}");
+						mySpreadsheet.changeCellFormulaAndRecalculate(cellID, cellFormula);
 					}
-					
-					myCurrentX = 0;
-					myCurrentY = 0;
-					
-					start();
+					scan.close();
 				} catch (Exception e) {
 					exit = false;
 					JOptionPane.showMessageDialog(GUI, "Invalid spreadsheet file", 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
 				}
 			}
+		}
+		if (exit) {
+			if (spreadsheetLoaded) {
+				GUI.remove(myButtonPanel);
+				GUI.remove(myHorizontalMovePanel);
+				GUI.remove(myVerticalMovePanel);
+			} else {
+				spreadsheetLoaded = true;
+				GUI.remove(myInstructions);
+			}
+			
+			myCurrentX = 0;
+			myCurrentY = 0;
+			
+			start();
 		}
 	}
 	
@@ -399,8 +408,7 @@ public class GUI {
         
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				cellChangeHelper(theRow, theColumn);
-				
+				cellChangeHelper(theColumn + myCurrentX, theRow + myCurrentY);
 			}
             
         });
@@ -425,24 +433,20 @@ public class GUI {
 				try {
 					remoteCellToken = CellToken.getCellToken(s.toUpperCase());
 					exit = true;
+					if (remoteCellToken.getRow() == CellToken.BADCELL || remoteCellToken.getColumn() == CellToken.BADCELL) {
+						exit = false;
+						JOptionPane.showMessageDialog(GUI, "Invalid cell", 
+								"Error!", JOptionPane.ERROR_MESSAGE, null);
+					}
+					else {
+						cellChangeHelper(remoteCellToken.getRow(), remoteCellToken.getColumn());
+						break;
+					}
 				} catch (Exception e) {
 					exit = false;
-					JOptionPane.showMessageDialog(GUI, e.getMessage(), 
+					JOptionPane.showMessageDialog(GUI, "Designated cell outside spreadsheet bounds", 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
 				}	
-			}
-			if (remoteCellToken.getRow() == CellToken.BADCELL || remoteCellToken.getColumn() == CellToken.BADCELL) {
-				exit = false;
-				JOptionPane.showMessageDialog(GUI, "Invalid cell!", 
-						"Error!", JOptionPane.ERROR_MESSAGE, null);
-			}
-			else if (remoteCellToken.getRow() >= mySize || remoteCellToken.getColumn() >= mySize) {
-				exit = false;
-				JOptionPane.showMessageDialog(GUI, "Designated cell outside of spreadsheet bounds", 
-						"Error!", JOptionPane.ERROR_MESSAGE, null);
-			} else {
-				cellChangeHelper(remoteCellToken.getRow(), remoteCellToken.getColumn());
-				break;
 			}
 		}
     }
@@ -450,21 +454,20 @@ public class GUI {
     
     /**
      * Helper method to assist in changing the formula of a cell.
-     * @param theRow The row of the cell to change.
      * @param theColumn The column of the cell to change.
+     * @param theRow The row of the cell to change.
      */
-	private void cellChangeHelper(int theRow, int theColumn) {
-		
-		CellToken cellToken = new CellToken();
-		String cellID = (generateColumnLabel(theColumn + myCurrentY) + (theRow + myCurrentX + 1));//Edited this so the arrows move the spreadsheet correctly
-		cellToken.setRow(theRow + myCurrentX);
-		cellToken.setColumn(theColumn + myCurrentY);
-		
+	private void cellChangeHelper(int theColumn, int theRow) {
 		boolean exit = false;
 		while (!exit) {
+			CellToken cellToken = new CellToken();
+			String cellID = (generateColumnLabel(theColumn) + (theRow + 1));//Edited this so the arrows move the spreadsheet correctly
+			cellToken.setRow(theRow);
+			cellToken.setColumn(theColumn);
 			String former = mySpreadsheet.getCellFormula(cellToken);
 			String s = (String) JOptionPane.showInputDialog(GUI, "Change formula for cell " + cellID + ":", 
 					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, former);
+
 			if (s != null) {
 				exit = true;
 				try {
@@ -530,7 +533,7 @@ public class GUI {
 					
 			// Down movement		
 				} else if (theText.equals("🡓")) {
-					myCurrentY += mySSDimension;
+					myCurrentY += moveValue;
 					myUpButton.setEnabled(myCurrentY > 0);
 					myDownButton.setEnabled(myCurrentY + MAX_DISPLAY + 1 <= mySize);
 					
@@ -539,12 +542,12 @@ public class GUI {
 					}
 					
 				}
-
-				relabel(myCurrentX, myCurrentY);				
-			}           			
+					
+				relabel(myCurrentX, myCurrentY);
 				
-			});
+			}
             
+        });
 
         return button;
     }
