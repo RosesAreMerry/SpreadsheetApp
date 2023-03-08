@@ -9,10 +9,13 @@
  */
 package Spreadsheet;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.function.Function;
 import Cell.Cell;
 import Cell.Tokens.CellToken;
@@ -270,4 +273,33 @@ public class Spreadsheet {
     
     return cell[0].length;
   }
+  
+  /**
+   * Returns a Spreadsheet object from a given file.
+   * @param theFile The file to load the spreadsheet from.
+   * @return The generated spreadsheet.
+   */
+  public static Spreadsheet generateLoadedSpreadsheet(File theFile) throws FileNotFoundException {
+
+	  	Scanner scan = new Scanner(theFile);
+
+	  	myDimensions = Integer.valueOf(scan.nextLine());
+
+	  	Spreadsheet returnSpreadsheet = new Spreadsheet(myDimensions);
+
+	  	while (scan.hasNext()) {
+	  		String cellData = scan.nextLine();
+			int seperationIndex = cellData.indexOf(';');
+			String cellID = cellData.substring(0, seperationIndex);
+			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
+			returnSpreadsheet.changeCellFormula(cellID, cellFormula);
+	  	}
+
+	  	scan.close();
+	  	
+	  	returnSpreadsheet.recalculateAll();
+
+	  	return returnSpreadsheet;
+  }
+  
 }
