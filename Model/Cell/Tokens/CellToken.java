@@ -5,6 +5,7 @@ public class CellToken extends Token {
 
   private int column;
   private int row;
+  private boolean negated = false;
 
   public int getRow() {
     return row;
@@ -20,6 +21,14 @@ public class CellToken extends Token {
   
   public void setColumn(int column) {
     this.column = column;
+  }
+
+  public void negate() {
+    negated = !negated;
+  }
+
+  public boolean isNegated() {
+    return negated;
   }
 
   /**

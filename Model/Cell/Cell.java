@@ -64,14 +64,14 @@ public class Cell {
    * @return ArrayList<Cell> list of all dependencies in the order they need to be calculated
    */
   public ArrayList<Cell> getDependencies() {
-	  List<Cell> dependencies = new ArrayList<>();
-	    for (Token token : postfixFormula) {
-	        if (token instanceof CellToken) {
-	            dependencies.add(getCellValue.apply((CellToken) token));
-	        }
-	    }
-	    return (ArrayList<Cell>) dependencies;
-	}
+    List<Cell> dependencies = new ArrayList<>();
+      for (Token token : postfixFormula) {
+          if (token instanceof CellToken) {
+              dependencies.add(getCellValue.apply((CellToken) token));
+          }
+      }
+      return (ArrayList<Cell>) dependencies;
+  }
   
 //  public List<Cell> getDependencies() {
 //    return postfixFormula.stream().filter(token -> token instanceof CellToken)
@@ -93,11 +93,15 @@ public class Cell {
       if (token instanceof LiteralToken) {
         currentValues.push(((LiteralToken) token).getValue());
       } else if (token instanceof CellToken) {
-    	  
+        
         Cell cell = getCellValue.apply((CellToken) token);
 
         if (cell != null) {
-          currentValues.push(getCellValue.apply((CellToken) token).getValue());
+          if (((CellToken) token).isNegated()) {
+            currentValues.push(-getCellValue.apply((CellToken) token).getValue());
+          } else {
+            currentValues.push(getCellValue.apply((CellToken) token).getValue());
+          }
         } else {
           currentValues.push(0);
         }
@@ -108,6 +112,9 @@ public class Cell {
         }
       }
       if (formula.size() == 1 && formula.peek() instanceof LiteralToken) {
+        if (currentValues.size() > 0) {
+          throw new RuntimeException("Bad Formula: " + this.formula);
+        }
         result = ((LiteralToken) formula.pop()).getValue();
       }
       if (formula.isEmpty() && currentValues.size() == 1) {
@@ -151,6 +158,11 @@ public class Cell {
 
     int parenthesesCount = 0; // count of left parentheses (increases priority of operators)
 
+    boolean lastCharWasValue = false; // Keep track of whether last char was value so - operators
+    // can be handled correctly and multiple values throw a bad formula.
+    
+    boolean nextValueIsNegated = false;
+
     while (index < formula.length() ) {
         // get rid of leading whitespace characters
         while (index < formula.length() ) {
@@ -170,7 +182,12 @@ public class Cell {
         if (OperatorToken.isOperator(ch)) {
           OperatorToken currentOperator = new OperatorToken(ch);
           currentOperator.incrementParenPriority(parenthesesCount);
-            // We found an operator token
+          // We found an operator token
+          if (!lastCharWasValue && ch == '-') {
+            nextValueIsNegated = true;
+            index++;
+          } else {
+            lastCharWasValue = false;
             switch (ch) {
                 case OperatorToken.Plus:
                 case OperatorToken.Minus:
@@ -190,29 +207,30 @@ public class Cell {
                             operatorStack.pop();
                             returnStack.push(stackOperator);
                         } else {
-                            break;
+                          break;
                         }
                     }
                     break;
-
                 default:
-                    // This case should NEVER happen
-                    System.out.println("Error in getFormula.");
-                    System.exit(0);
-                    break;
+                  // This case should NEVER happen
+                  System.out.println("Error in getFormula.");
+                  System.exit(0);
+                  break;
             }
             // push the operator on the operator stack
             operatorStack.push(currentOperator);
 
             index++;
-
+          }
         } else if (ch == '(') {
             // We found a left parenthesis
+            lastCharWasValue = false;
             parenthesesCount++;
             index++;
         }
         else if (ch == ')') {
             // We found a right parenthesis
+            lastCharWasValue = false;
             parenthesesCount--;
             if (parenthesesCount < 0) {
                 error = true;
@@ -221,6 +239,11 @@ public class Cell {
             index++;
         } else if (Character.isDigit(ch)) {
             // We found a literal token
+            if (lastCharWasValue) {
+              error = true;
+              break;
+            }
+            lastCharWasValue = true;
             literalValue = ch - '0';
             index++;
             while (index < formula.length()) {
@@ -232,11 +255,20 @@ public class Cell {
                     break;
                 }
             }
+            if (nextValueIsNegated) {
+              literalValue = -literalValue;
+              nextValueIsNegated = false;
+            }
             // place the literal on the output stack
             returnStack.push(new LiteralToken(literalValue));
 
         } else if (Character.isUpperCase(ch)) {
             // We found a cell reference token
+            if (lastCharWasValue) {
+              error = true;
+              break;
+            }
+            lastCharWasValue = true;
             CellToken cellToken = new CellToken();
             index = CellToken.getCellToken(formula, index, cellToken);
             if (cellToken.getRow() == CellToken.BADCELL) {
@@ -244,6 +276,10 @@ public class Cell {
                 break;
             } else {
                 // place the cell reference on the output stack
+                if (nextValueIsNegated) {
+                  cellToken.negate();
+                  nextValueIsNegated = false;
+                }
                 returnStack.push(cellToken);
             }
 
