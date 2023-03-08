@@ -506,7 +506,7 @@ public class GUI {
 								"Error!", JOptionPane.ERROR_MESSAGE, null);
 					}
 					else {
-						cellChangeHelper(remoteCellToken.getRow(), remoteCellToken.getColumn());
+						cellChangeHelper(remoteCellToken.getColumn(), remoteCellToken.getRow());
 						break;
 					}
 				} catch (Exception e) {
