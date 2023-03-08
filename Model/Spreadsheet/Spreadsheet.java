@@ -25,6 +25,21 @@ public class Spreadsheet {
 	  Spreadsheet.dimensions= dimensions;
 	  cell = new Cell[dimensions][dimensions];
   }
+  
+  /**
+   * Clears the spreadsheet.
+   */
+  public void clear() {
+	  for (int i = 0; i < dimensions; i++) {
+		  for (int j = 0; j < dimensions; j++) {
+			  if (cell[i][j] != null) {
+				  cell[i][j] = null;
+			  }
+		  }
+	  }
+  }
+  
+  
  /**
   *  prints the values of a cell
   */

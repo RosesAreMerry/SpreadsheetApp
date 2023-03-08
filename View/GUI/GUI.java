@@ -198,7 +198,8 @@ public class GUI {
         mClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
-                clearSpreadsheet();
+            	SPREADSHEET.clear();
+        		relabel(myCurrentX, myCurrentY);
                 mClear.setEnabled(false);
             }
         });
@@ -274,23 +275,6 @@ public class GUI {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * Clears all values in the spreadsheet.
-	 */
-	private void clearSpreadsheet() {
-		CellToken clearToken = new CellToken();
-		String cellID = "";
-		for (int i = 0; i < mySSDimension; i++) {
-			for (int j = 0; j < mySSDimension; j++) {
-				clearToken.setRow(i);
-				clearToken.setColumn(j);
-				cellID = (generateColumnLabel(j) + (i + 1));
-				SPREADSHEET.changeCellFormula(clearToken, "");
-			}
-		}
-		relabel(myCurrentX, myCurrentY);
 	}
 	
 	/**
