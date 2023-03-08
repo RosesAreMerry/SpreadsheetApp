@@ -297,6 +297,7 @@ public class GUI {
 	
 	private void loadFileHelper() {
 		int result = 0;
+		Spreadsheet myTestSpreadsheet = null;
 		boolean exit = false;
 		while (result != JFileChooser.CANCEL_OPTION && !exit){
 			result = myFileChooser.showOpenDialog(GUI);
@@ -310,14 +311,14 @@ public class GUI {
 					System.out.println(next);
 					System.out.println("////////");
 					mySize = Integer.valueOf(next);
-					mySpreadsheet = new Spreadsheet(mySize);
+					myTestSpreadsheet = new Spreadsheet(mySize);
 					while (scan.hasNext()) {
 						String cellData = scan.nextLine();
 						int seperationIndex = cellData.indexOf(';');
 						String cellID = cellData.substring(0, seperationIndex);
 						String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
 						System.out.println("Location: {" + cellID + "}, Formula: {" + cellFormula + "}");
-						mySpreadsheet.changeCellFormulaAndRecalculate(cellID, cellFormula);
+						myTestSpreadsheet.changeCellFormulaAndRecalculate(cellID, cellFormula);
 					}
 					scan.close();
 				} catch (Exception e) {
@@ -329,6 +330,7 @@ public class GUI {
 		}
 		if (exit) {
 			if (spreadsheetLoaded) {
+				
 				GUI.remove(myButtonPanel);
 				GUI.remove(myHorizontalMovePanel);
 				GUI.remove(myVerticalMovePanel);
@@ -336,6 +338,8 @@ public class GUI {
 				spreadsheetLoaded = true;
 				GUI.remove(myInstructions);
 			}
+			
+			mySpreadsheet = myTestSpreadsheet;
 			
 			myCurrentX = 0;
 			myCurrentY = 0;
