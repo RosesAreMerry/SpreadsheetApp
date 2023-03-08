@@ -44,10 +44,10 @@ public class GUI {
     private static final JFrame GUI = new JFrame("TCSS 342 Spreadsheet App");
 	
     /** The size of the spreadsheet. */
-	private int mySize = 11;
+	private int mySize = 0;
 	
 	/** The n-by-n size of the spreadsheet display. */
-	private static final int MAX_DISPLAY = 4;
+	private static final int MAX_DISPLAY = 7;
 	
 	/** The spreadsheet. */
 	private Spreadsheet mySpreadsheet;
@@ -111,6 +111,8 @@ public class GUI {
 	public void start() {
 		
 		if (spreadsheetLoaded) {
+			
+			mySize = mySpreadsheet.getNumRows();
 			
 			if (mySize < MAX_DISPLAY) {
 				mySSDimension = mySize;
@@ -189,36 +191,72 @@ public class GUI {
 		}
 		
 		mClear.setEnabled(false);
+		mClear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+            	mySpreadsheet.clear();
+        		relabel(myCurrentX, myCurrentY);
+                mClear.setEnabled(false);
+            }
+        });
+		
+		
 		
 		final JMenu mHome = new JMenu("Home");
+		
 		final JMenu mSSOptions = new JMenu("Spreadsheet");
+		mSSOptions.setEnabled(spreadsheetLoaded);
+		
 		final JMenu mCOptions = new JMenu("Cell");
+		mCOptions.setEnabled(spreadsheetLoaded);
+		
 		final JMenu mDisplay = new JMenu("Display");
 		
 		final JMenuItem mCellEdit = new JMenuItem("Edit Formula...");
+		mCellEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+		mCellEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                remoteCellChangeHelper();
+            }
+        });
+		
+		final JMenuItem mNew = new JMenuItem("New...");
+		mNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+        mNew.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                newSpreadsheetHelper();
+            }
+        });
+		
 		final JMenuItem mLoad = new JMenuItem("Load...");
-        final JMenuItem mSave = new JMenuItem("Save...");
-        final JMenuItem mExit = new JMenuItem("Exit");
-        mCellEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+		mLoad.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+        mLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                loadFileHelper();
+            }
+        });
         
-        mExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
-        
+		final JMenuItem mSave = new JMenuItem("Save...");
         mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         mSave.setEnabled(spreadsheetLoaded);
         
-        mLoad.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
-        mCOptions.setEnabled(spreadsheetLoaded);
-        mSSOptions.setEnabled(spreadsheetLoaded);
-        
+        final JMenuItem mExit = new JMenuItem("Exit");
+        mExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+        mExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                GUI.dispatchEvent(new WindowEvent(GUI, WindowEvent.WINDOW_CLOSING));
+            }
+        });
         
     	final ButtonGroup myButtonGroup = new ButtonGroup();
     	
-    	final JRadioButtonMenuItem mDisplayFormulas = new JRadioButtonMenuItem("Display Formulas");
-    	final JRadioButtonMenuItem mDisplayValues = new JRadioButtonMenuItem("Display Values");
-        
-    	myButtonGroup.add(mDisplayValues);
-    	myButtonGroup.add(mDisplayFormulas);
     	
+    	final JRadioButtonMenuItem mDisplayValues = new JRadioButtonMenuItem("Display Values");
+    	myButtonGroup.add(mDisplayValues);
     	mDisplayValues.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
@@ -227,6 +265,8 @@ public class GUI {
             }
         });
     	
+    	final JRadioButtonMenuItem mDisplayFormulas = new JRadioButtonMenuItem("Display Formulas");
+    	myButtonGroup.add(mDisplayFormulas);
     	mDisplayFormulas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
@@ -235,41 +275,14 @@ public class GUI {
             }
         });
         
-        mLoad.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                loadFileHelper();
-            }
-        });
-        
-        mClear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-            	mySpreadsheet.clear();
-        		relabel(myCurrentX, myCurrentY);
-                mClear.setEnabled(false);
-            }
-        });
-        
-        mCellEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                remoteCellChangeHelper();
-            }
-        });
-        
-        mExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                GUI.dispatchEvent(new WindowEvent(GUI, WindowEvent.WINDOW_CLOSING));
-            }
-        });
-        
         myMenuBar = new JMenuBar();
         myMenuBar.add(mHome);
         myMenuBar.add(mCOptions);
         myMenuBar.add(mSSOptions);
+        GUI.setJMenuBar(myMenuBar);	
         
+        mHome.add(mNew);
+        mHome.addSeparator();
         mHome.add(mLoad);
         mHome.add(mSave);
         mHome.addSeparator();
@@ -284,17 +297,65 @@ public class GUI {
         mCOptions.add(mDisplay);
         
         mSSOptions.add(mClear);
-        
-		GUI.setJMenuBar(myMenuBar);		
 		
 		GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GUI.setSize(new Dimension(3 * SCREEN_WIDTH / 5, 2 * SCREEN_HEIGHT / 3));
 		GUI.setLocationRelativeTo(null);
-		
 		GUI.setVisible(true);
-        
 	}
 	
+	private void newSpreadsheetHelper() {
+    	String s = "";
+    	boolean exit = false;
+    	Spreadsheet myTestSpreadsheet = null;
+    	int dimension = 0;
+    	while (!exit && s != null) {
+			s = (String) JOptionPane.showInputDialog(GUI, "Input length of spreadsheet (value will also be the width)", 
+					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, 
+					s);
+			if (s != null) {
+				try {
+					dimension = Integer.valueOf(s);
+					System.out.println("New spreadsheet length: " + dimension);
+					exit = true;
+					if (dimension < 1) {
+						exit = false;
+						JOptionPane.showMessageDialog(GUI, "Spreadsheet length value must be at least 1", 
+								"Error!", JOptionPane.ERROR_MESSAGE, null);
+					} else {
+						System.out.println("Successfully created!");
+						myTestSpreadsheet = new Spreadsheet(dimension);
+					}
+				} catch (Exception e) {
+					exit = false;
+					JOptionPane.showMessageDialog(GUI, "Invalid length value", 
+							"Error!", JOptionPane.ERROR_MESSAGE, null);
+				}	
+			}
+		}
+    	if (exit) {
+			if (spreadsheetLoaded) {
+				
+				GUI.remove(myButtonPanel);
+				GUI.remove(myHorizontalMovePanel);
+				GUI.remove(myVerticalMovePanel);
+			} else {
+				spreadsheetLoaded = true;
+				GUI.remove(myInstructions);
+			}
+			
+			mySpreadsheet = myTestSpreadsheet;
+			
+			myCurrentX = 0;
+			myCurrentY = 0;
+			
+			start();
+		}
+    }
+	
+	/**
+	 * Helper method to load a spreadsheet.
+	 */
 	private void loadFileHelper() {
 		int result = 0;
 		Spreadsheet myTestSpreadsheet = null;
@@ -419,6 +480,8 @@ public class GUI {
 
         return button;
     }
+    
+    
     
     /**
      * Helper method to remotely edit a cell.
