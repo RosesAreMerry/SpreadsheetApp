@@ -274,6 +274,10 @@ public class Spreadsheet {
     return cell[0].length;
   }
   
+  /**
+   * Generates a complete file of the spreadsheet.
+   * @return The formatted text file of the spreadsheet.
+   */
   public String generateFile() {
 	  
 	  StringBuilder sb = new StringBuilder();
