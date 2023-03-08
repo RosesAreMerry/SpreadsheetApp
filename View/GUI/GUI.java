@@ -19,6 +19,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.BoxLayout;
@@ -323,7 +325,6 @@ public class GUI {
 						JOptionPane.showMessageDialog(GUI, "Spreadsheet length value must be at least 1", 
 								"Error!", JOptionPane.ERROR_MESSAGE, null);
 					} else {
-						System.out.println("Successfully created!");
 						myTestSpreadsheet = new Spreadsheet(dimension);
 					}
 				} catch (Exception e) {
@@ -360,28 +361,17 @@ public class GUI {
 		int result = 0;
 		Spreadsheet myTestSpreadsheet = null;
 		boolean exit = false;
+		List<String> allFileLines = new ArrayList<String>();
 		while (result != JFileChooser.CANCEL_OPTION && !exit){
 			result = myFileChooser.showOpenDialog(GUI);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				try {
 					exit = true;
-					File data = myFileChooser.getSelectedFile();
-					Scanner scan = new Scanner(data);				
+					File data = myFileChooser.getSelectedFile();			
 					GUI.setTitle("TCSS 342 Spreadsheet App - " + data);
-					String next = scan.nextLine();
-					System.out.println(next);
-					System.out.println("////////");
-					mySize = Integer.valueOf(next);
-					myTestSpreadsheet = new Spreadsheet(mySize);
-					while (scan.hasNext()) {
-						String cellData = scan.nextLine();
-						int seperationIndex = cellData.indexOf(';');
-						String cellID = cellData.substring(0, seperationIndex);
-						String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
-						System.out.println("Location: {" + cellID + "}, Formula: {" + cellFormula + "}");
-						myTestSpreadsheet.changeCellFormulaAndRecalculate(cellID, cellFormula);
-					}
-					scan.close();
+					
+					myTestSpreadsheet = Spreadsheet.generateLoadedSpreadsheet(data);
+					
 				} catch (Exception e) {
 					exit = false;
 					JOptionPane.showMessageDialog(GUI, "Invalid spreadsheet file", 

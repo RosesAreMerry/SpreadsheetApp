@@ -1,4 +1,6 @@
 package Spreadsheet;
+import java.io.File;
+import java.io.FileNotFoundException;
 /**
  * 
  */
@@ -6,6 +8,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.function.Function;
 import Cell.Cell;
 import Cell.Tokens.CellToken;
@@ -256,4 +259,31 @@ public class Spreadsheet {
     
     return cell[0].length;
   }
+  
+  /**
+   * Returns a Spreadsheet object from a given file.
+   * @param theFile
+   */
+  public static Spreadsheet generateLoadedSpreadsheet(File theFile) throws FileNotFoundException {
+	  	
+	  	Scanner scan = new Scanner(theFile);
+	  	
+	  	dimensions = Integer.valueOf(scan.nextLine());
+	  	
+	  	Spreadsheet returnSpreadsheet = new Spreadsheet(dimensions);
+		
+	  	while (scan.hasNext()) {
+	  		String cellData = scan.nextLine();
+			int seperationIndex = cellData.indexOf(';');
+			String cellID = cellData.substring(0, seperationIndex);
+			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
+			returnSpreadsheet.changeCellFormula(cellID, cellFormula);
+	  	}
+	  	
+	  	returnSpreadsheet.recalculateAll();
+  		
+	  	return returnSpreadsheet;
+  }
+  
+  
 }
