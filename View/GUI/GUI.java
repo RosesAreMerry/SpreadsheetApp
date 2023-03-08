@@ -244,7 +244,7 @@ public class GUI {
 		final JMenuItem mSave = new JMenuItem("Save...");
         mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         mSave.setEnabled(spreadsheetLoaded);
-        
+              
         final JMenuItem mExit = new JMenuItem("Exit");
         mExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
         mExit.addActionListener(new ActionListener() {
