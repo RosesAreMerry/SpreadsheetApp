@@ -197,6 +197,7 @@ public class Cell {
                 case OperatorToken.Minus:
                 case OperatorToken.Mult:
                 case OperatorToken.Div:
+                case OperatorToken.Pow:
                     // push operatorTokens onto the output stack until
                     // we reach an operator on the operator stack that has
                     // lower priority than the current one.

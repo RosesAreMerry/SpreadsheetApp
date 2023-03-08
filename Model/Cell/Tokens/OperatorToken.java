@@ -6,6 +6,7 @@ public class OperatorToken extends Token {
   public static final char Minus = '-';
   public static final char Mult = '*';
   public static final char Div = '/';
+  public static final char Pow = '^';
 
   private int parenPriority;
   private int priority;
@@ -46,6 +47,9 @@ public class OperatorToken extends Token {
         case Div:
             returnVal = val2 / val1;
             break;
+        case Pow:
+            returnVal = (int) Math.pow(val2, val1);
+            break;
         default:
             // This case should NEVER happen
             System.out.println("Error in OperatorToken.evaluate.");
@@ -65,7 +69,8 @@ public class OperatorToken extends Token {
     return ((ch == '+') ||
             (ch == '-') ||
             (ch == '*') ||
-            (ch == '/') );
+            (ch == '/') ||
+            (ch == '^'));
   }
 
   /**
@@ -74,6 +79,7 @@ public class OperatorToken extends Token {
    * priorities:
    *   +, - : 0
    *   *, / : 1
+   *   ^    : 2
    *
    * @param ch  a char
    * @return  the priority of the operator
@@ -93,6 +99,8 @@ public class OperatorToken extends Token {
             return 1;
         case Div:
             return 1;
+        case Pow:
+            return 2;
         default:
             // This case should NEVER happen
             System.out.println("Error in operatorPriority.");
@@ -101,23 +109,25 @@ public class OperatorToken extends Token {
     }
   }
 
+
+  public int getParenPriority() {
+    return parenPriority;
+  }
+
   /*
   * Return the priority of this OperatorToken.
   *
   * default priorities:
   *   +, - : 0
   *   *, / : 1
+  *   ^    : 2
   *
   * @return  the priority of operatorToken
   */
-  public int getParenPriority() {
-    return parenPriority;
-  }
-
   public int getPriority() {
     return priority;
   }
-    
+  
   public void incrementParenPriority(int parenthesesCount) {
     parenPriority += parenthesesCount;
   }
