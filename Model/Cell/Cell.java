@@ -63,26 +63,23 @@ public class Cell {
   }
 
 
-  /** Function that returns a list of all dependencies in the order they need to be calculated.
+  /** Function that returns a list of all cells that this cell depends on.
    * 
-   * @return ArrayList<Cell> list of all dependencies in the order they need to be calculated
+   * @return ArrayList<Cell> list of all cells that this cell depends on.
    */
   public ArrayList<Cell> getDependencies() {
-    List<Cell> dependencies = new ArrayList<>();
+    ArrayList<Cell> dependencies = new ArrayList<Cell>();
       for (Token token : postfixFormula) {
           if (token instanceof CellToken) {
               dependencies.add(getCellValue.apply((CellToken) token));
           }
       }
-      return (ArrayList<Cell>) dependencies;
+      return dependencies;
   }
-  
-//  public List<Cell> getDependencies() {
-//    return postfixFormula.stream().filter(token -> token instanceof CellToken)
-//    		.map(token -> getCellValue.apply((CellToken) token))
-//    		.collect(Collectors.toList());
-//  }
 
+  /**
+   * Recalculate the value of this cell using the postfix formula.
+   */
   public void recalculate() {
     Stack<Integer> currentValues = new Stack<Integer>();
     int result = 0;
@@ -113,6 +110,8 @@ public class Cell {
         if (currentValues.size() >= 2) {
           value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
           formula.push(new LiteralToken(value));
+        } else {
+          throw new RuntimeException("Bad Formula: " + this.formula);
         }
       }
       if (formula.size() == 1 && formula.peek() instanceof LiteralToken) {
@@ -190,6 +189,9 @@ public class Cell {
           if (!lastCharWasValue && ch == '-') {
             nextValueIsNegated = true;
             index++;
+          } else if (!lastCharWasValue) {
+            error = true;
+            break;
           } else {
             lastCharWasValue = false;
             switch (ch) {
