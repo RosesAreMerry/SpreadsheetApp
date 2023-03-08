@@ -1,5 +1,7 @@
 package Spreadsheet;
-
+/**
+ * 
+ */
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +22,8 @@ public class Spreadsheet {
 	
 /**
  *  constructor	initializes the spreadsheet
- */
+ *  @param dimension
+**/
   public Spreadsheet(int dimensions) {
 	  Spreadsheet.dimensions= dimensions;
 	  cell = new Cell[dimensions][dimensions];
@@ -45,7 +48,8 @@ public class Spreadsheet {
   }
 
   /**
-   *  prints the formula of a single cell
+   * prints the formula of a single cell
+   * @param cellToken
    */
   public String getCellFormula(CellToken cellToken) {
 		String theFormula;
@@ -75,6 +79,7 @@ public class Spreadsheet {
 
   /**
    *  print formulas of all the cells in the spreadsheet 
+   *  @return string
    */
   public String printAllFormulas(){	  
 		StringBuilder sb = new StringBuilder();
@@ -90,7 +95,7 @@ public class Spreadsheet {
 				sb.append(" \n");
 		}
 		return sb.toString();
-	}
+}
   
   /**
    * changes the cell formula to a new formula.
@@ -130,6 +135,7 @@ public class Spreadsheet {
 
 	/**
 	 * Create a topological sort of the spreadsheet.
+	 * @return sorted Arraylist according to their topological order
 	 */
 	public ArrayList<Cell> topologicalSort() throws RuntimeException {
 		Map<Cell, ArrayList<Cell>> topMap = new HashMap<Cell, ArrayList<Cell>>();

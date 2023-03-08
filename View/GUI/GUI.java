@@ -470,10 +470,8 @@ public class GUI {
 					
 				}
 				
-				relabel(myCurrentX, myCurrentY);
-				
-			}
-            
+				relabel(myCurrentX, myCurrentY);				
+			}           
         });
 
         return button;

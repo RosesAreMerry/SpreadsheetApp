@@ -10,8 +10,8 @@
 
 	  public static void main(String[] args) {
 		  
-		  Spreadsheet testSpreadsheet = new Spreadsheet(2);
-
+		  //Spreadsheet testSpreadsheet = new Spreadsheet(3);
+		  Spreadsheet spreadsheet= new Spreadsheet(3);
 			/**
 			 * Test CellToken for A0
 			 */
@@ -46,9 +46,8 @@
 //	     celltoken1.setColumn(0);
 //	     celltoken1.setRow(0);
 //	     
-//	     CellToken celltoken2=new CellToken();
-//	     celltoken2.setRow(0);
-//	     celltoken2.setColumn(1);
+	     CellToken celltoken2= CellToken.getCellToken("A2");
+	     
 	     
 //	     CellToken celltoken3=new CellToken();
 //	     celltoken2.setRow(1);
@@ -56,22 +55,25 @@
 	     
 	    
 			theTestCellToken1.setRow(0);
-			theTestCellToken1.setColumn(0); //A0
-			theTestCellToken2.setRow(0);
-			theTestCellToken2.setColumn(1); //A1
-			theTestCellToken3.setRow(1);
-			theTestCellToken3.setColumn(0);// B0
-			theTestCellToken4.setRow(1);
-			theTestCellToken4.setColumn(1);// B1   
+			theTestCellToken1.setColumn(0); //A1
+			theTestCellToken2.setRow(1);
+			theTestCellToken2.setColumn(0); //A2
+			theTestCellToken3.setRow(2);
+			theTestCellToken3.setColumn(1);// B0
+			theTestCellToken4.setRow(2);
+			theTestCellToken4.setColumn(2);// B1   
 	    
-	    
-	    Spreadsheet spreadsheet= new Spreadsheet(2);
-	    spreadsheet.changeCellFormula( theTestCellToken1, "5+5");
-	    spreadsheet.changeCellFormula( theTestCellToken2, "5+4");
-	    spreadsheet.changeCellFormula( theTestCellToken3,  "2+10");
-	    spreadsheet.changeCellFormula( theTestCellToken4,  "A1+A2");
+			
+			
+	    spreadsheet.changeCellFormula( "A1", "5+5");
+	    spreadsheet.changeCellFormula("A2", "5+4");
+	    spreadsheet.changeCellFormula( "B1",  "2+10");
+	    spreadsheet.changeCellFormula( "B2",  "A1+A2");
+	    spreadsheet.changeCellFormula( "A3",  "5+2");
+	    spreadsheet.changeCellFormula( "B3",  "A1+C3");
+	    //spreadsheet.changeCellFormula( "C3",  "10+2");
 	    //spreadsheet.changeCellFormulaAndRecalculate(celltoken2, null);
-	    spreadsheet.changeCellFormulaAndRecalculate(theTestCellToken2, " A0+B1");
+	    spreadsheet.changeCellFormulaAndRecalculate(celltoken2, "A1+B1");
 	    System.out.println(spreadsheet.printAllFormulas());
 	    System.out.println(spreadsheet.printValues());
 	   
@@ -103,8 +105,8 @@
 	    
 	    
 
-	  }
+	 }
 
-	}
+}
 
 
