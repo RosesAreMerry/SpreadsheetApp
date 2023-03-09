@@ -6,6 +6,7 @@
  * a spreadsheet class has various functionalities 
  * @author malihahossain 
  * @author Rosemary
+ * @author Jacob Erickson
  * @version 8th March 2023
  */
 package Spreadsheet;
@@ -169,8 +170,8 @@ public class Spreadsheet {
 
   /**
    * changes the cell formula and recalculates the values of the spreadsheet.   
-   * @param stringToken
-   * @param formula
+   * @param stringToken The string of the cell label.
+   * @param formula The formula in the cell.
    * @ throws InvalidParameterException, RuntimeException
    */
   public void changeCellFormulaAndRecalculate(String stringToken, String formula) throws InvalidParameterException, RuntimeException {
@@ -285,8 +286,10 @@ public class Spreadsheet {
 	  
 	  StringBuilder sb = new StringBuilder();
 	  
+	  // First line of file is the dimensions of the spreadsheet
 	  sb.append(myDimensions);
 	  
+	  // Add non-null cells to each line of file
 	  for (int row = 0; row < cell.length; row++) {
 		  for (int column = 0; column < cell[0].length; column++) {
 			  if (cell[row][column] != null) {
@@ -305,15 +308,18 @@ public class Spreadsheet {
    * Returns a Spreadsheet object from a given file.
    * @param theFile The file to load the spreadsheet from.
    * @return The generated spreadsheet.
+   * @throws FileNotFoundException if the file is not found.
    */
   public static Spreadsheet generateLoadedSpreadsheet(File theFile) throws FileNotFoundException {
 
 	  	Scanner scan = new Scanner(theFile);
 
+	  	// First line of file is the dimensions of the spreadsheet
 	  	myDimensions = Integer.valueOf(scan.nextLine());
 
 	  	Spreadsheet returnSpreadsheet = new Spreadsheet(myDimensions);
 
+	  	// Parses lines of file to add cells to spreadsheet
 	  	while (scan.hasNext()) {
 	  		String cellData = scan.nextLine();
 			int seperationIndex = cellData.indexOf(';');
@@ -324,6 +330,7 @@ public class Spreadsheet {
 
 	  	scan.close();
 	  	
+	  	// Wait until all cells are entered to do calculations
 	  	returnSpreadsheet.recalculateAll();
 
 	  	return returnSpreadsheet;
@@ -341,13 +348,21 @@ public class Spreadsheet {
 		String cellID = "";
 		while (theColumn >= base) {
 			power++;
+			
+			// Finds digit corresponding with next base-26 power
 			int count = (int) Math.pow(alphanumeric.length(), power - 1);
 			int index = (((theColumn - 1) / count) + alphanumeric.length());
+			
+			// Necessary adjustment to maintain correct labels
 			if (power > 1) {
 				index--;
 			}
+			
+			// Obtains correct character to use
 			index %= alphanumeric.length();
 			cellID = alphanumeric.substring(index, index+1) + cellID;
+			
+			// Moves onto next "digit"
 			count *= alphanumeric.length();
 			base += count;
 		}

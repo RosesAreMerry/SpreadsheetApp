@@ -2,7 +2,6 @@
  * Driver Class
  * TCSS 342 - HW 6b
  * 3/6/2023
- * Jacob Erickson
  */
 
 package GUI;

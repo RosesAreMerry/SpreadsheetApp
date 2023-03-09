@@ -27,8 +27,6 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -154,6 +152,7 @@ public class GUI {
 		
 		myFileChooser.setFileFilter(myFileFilter);
 		
+		// If we do not have a spreadsheet yet, we cannot load the components below
 		if (spreadsheetLoaded) {
 			
 			mySize = mySpreadsheet.getNumRows();
@@ -196,12 +195,15 @@ public class GUI {
 			myVerticalMovePanel.setAlignmentY(0);
 			
 			myButtonPanel.add(cornerLabel);
+			
+			// Adds labels surrounding the buttons
 			for (int i = 0; i < mySSDimension; i++) {
 				myColumnLabels[i] = new JLabel("");
 				myColumnLabels[i].setHorizontalAlignment(JLabel.CENTER);
 				myColumnLabels[i].setVerticalAlignment(JLabel.BOTTOM);
 				myButtonPanel.add(myColumnLabels[i]);
 			}
+			// Adds buttons to panel
 			for (int i = 0; i < mySSDimension; i++) {
 				myRowLabels[i] = new JLabel("");
 				myRowLabels[i].setHorizontalAlignment(JLabel.CENTER);
@@ -354,41 +356,55 @@ public class GUI {
 		GUI.setVisible(true);
 	}
 	
+	/**
+	 * Helper method to create a new spreadsheet.
+	 */
 	private void newSpreadsheetHelper() {
     	String s = "";
-    	boolean enter = false;
     	boolean exit = false;
     	Spreadsheet myTestSpreadsheet = null;
     	int dimension = 0;
+    	
+    	// Loop maintained if user does not cancel or close out dialog
     	while (!exit && s != null) {
+    		
+    		// Opens dialog
 			s = (String) JOptionPane.showInputDialog(GUI, "Input length of spreadsheet (value will also be the width)", 
 					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, 
 					s);
 			if (s != null) {
 				try {
+					
+					// Tries to parse dialog value as integer
 					dimension = Integer.valueOf(s);
 					exit = true;
+					
+					// Spreadsheet cannot be smaller than 1x1
 					if (dimension < 1) {
 						exit = false;
 						JOptionPane.showMessageDialog(GUI, "Spreadsheet length value must be at least 1", 
 								"Error!", JOptionPane.ERROR_MESSAGE, null);
 					} else {
+						// New spreadsheet is created
 						myTestSpreadsheet = new Spreadsheet(dimension);
 					}
 				} catch (Exception e) {
 					exit = false;
+					// Non-integer value given
 					JOptionPane.showMessageDialog(GUI, "Invalid length value", 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
 				}	
 			}
 		}
+    	// Only runs if spreadsheet successfully loaded
     	if (exit) {
 			if (spreadsheetLoaded) {
-				
+				// Removes panels if visible
 				GUI.remove(myButtonPanel);
 				GUI.remove(myHorizontalMovePanel);
 				GUI.remove(myVerticalMovePanel);
 			} else {
+				// Otherwise, instructions are only visible, so we remove them
 				spreadsheetLoaded = true;
 				GUI.remove(myInstructions);
 			}
@@ -409,25 +425,34 @@ public class GUI {
 	private void saveFileHelper() {
 		int result = 0;
 		boolean exit = false;
-		List<String> allFileLines = new ArrayList<String>();
 		while (result != JFileChooser.CANCEL_OPTION && !exit){
+			
+			// Opens file save dialog
 			result = myFileChooser.showSaveDialog(GUI);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				boolean save = false;
 				try {
 					exit = true;
 					File data = myFileChooser.getSelectedFile();
+					
+					// Does the file we are trying to save to already exist?
 					if (data.exists()) {
+						
+						// If so, prompt the user if they want to overwrite
 	                    int resultOverwrite = JOptionPane.showConfirmDialog(null, 
 	                            "This file already exists. Overwrite?", 
 	                            "Overwrite", 
 	                            JOptionPane.OK_CANCEL_OPTION);
+	                    
+	                    // If they say OK, continue with saving
 	                    if (resultOverwrite == JOptionPane.OK_OPTION) {
 	                    	save = true;
 	                    } else {
+	                    	// Otherwise, keep them in the save loop
 	                    	exit = false;
 	                    }
 	                } else {
+	                	// If the file doesn't exist yet, proceed with saving
 	                	save = true;
 	                }
 					if (save) {
@@ -435,11 +460,15 @@ public class GUI {
 						if (!filePath.endsWith(".txt")) { //Edited this in to append .txt at the end of the file name -Louis
 							filePath += ".txt";
 						}
+						
+						// Generates the contents of the save file, then writes them to the file path
 						BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
 						writer.write(mySpreadsheet.generateFile());
-
 						writer.close();
-						GUI.setTitle("TCSS 342 Spreadsheet App - " + data); 
+						
+						// Adds the file path to the GUI
+						mySpreadsheetName = " - " + data;
+						GUI.setTitle("TCSS 342 Spreadsheet App" + mySpreadsheetName); 
 					}
 				} catch (Exception e) {
 					exit = false;
@@ -458,7 +487,6 @@ public class GUI {
 		Spreadsheet myTestSpreadsheet = null;
 		boolean exit = false;
 		File data = null;
-		List<String> allFileLines = new ArrayList<String>();
 		while (result != JFileChooser.CANCEL_OPTION && !exit){
 			result = myFileChooser.showOpenDialog(GUI);
 			if (result == JFileChooser.APPROVE_OPTION) {
@@ -469,7 +497,6 @@ public class GUI {
 					myTestSpreadsheet = Spreadsheet.generateLoadedSpreadsheet(data);
 					
 				} catch (Exception e) {
-					mySpreadsheetName = "";
 					exit = false;
 					JOptionPane.showMessageDialog(GUI, "Invalid spreadsheet file", 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
@@ -477,12 +504,14 @@ public class GUI {
 			}
 		}
 		if (exit) {
+			// Checks to see if this is the first spreadsheet we are loading
 			if (spreadsheetLoaded) {
-				
+				// Removes panels if they are already loaded
 				GUI.remove(myButtonPanel);
 				GUI.remove(myHorizontalMovePanel);
 				GUI.remove(myVerticalMovePanel);
 			} else {
+				// Instructions still visible, so we remove them
 				spreadsheetLoaded = true;
 				GUI.remove(myInstructions);
 			}
@@ -506,14 +535,20 @@ public class GUI {
 	 */
 	private void relabel(int theStartColumn, int theStartRow) {
 		CellToken displayToken = new CellToken();
+		
+		// Sets up the labels for the rows and columns
 		for (int i = 0; i < mySSDimension; i++) {
 			myRowLabels[i].setText("" + (i + theStartRow + 1));
 			myColumnLabels[i].setText(Spreadsheet.generateColumnLabel(i + theStartColumn));
 		}
+		
+		// Goes through each cell and displays the respective value
 		for (int i = 0; i < mySSDimension; i++) {
 			for (int j = 0; j < mySSDimension; j++) {
 				displayToken.setRow(i + theStartRow); //Edited this to properly shift the spreadsheet display
 				displayToken.setColumn(j + theStartColumn);
+				
+				// Displays values or formulas based on which mode is selected
 				if (viewValues && !(mySpreadsheet.getCellFormula(displayToken).equals(""))) {
 					mySpreadsheetCells[i][j].setText("" + mySpreadsheet.getCellValue(displayToken));
 				} else {
@@ -562,6 +597,8 @@ public class GUI {
 				try {
 					remoteCellToken = CellToken.getCellToken(s.toUpperCase());
 					exit = true;
+					
+					// If the designated cell could not be parsed correctly (invalid cell)
 					if (remoteCellToken.getRow() == CellToken.BADCELL || remoteCellToken.getColumn() == CellToken.BADCELL) {
 						exit = false;
 						JOptionPane.showMessageDialog(GUI, "Invalid cell", 
@@ -572,6 +609,8 @@ public class GUI {
 						break;
 					}
 				} catch (Exception e) {
+					
+					// If the designated cell is outside the bounds of the spreadsheet
 					exit = false;
 					JOptionPane.showMessageDialog(GUI, "Designated cell outside spreadsheet bounds", 
 							"Error!", JOptionPane.ERROR_MESSAGE, null);
@@ -589,6 +628,8 @@ public class GUI {
 		boolean exit = false;
 		while (!exit) {
 			CellToken cellToken = new CellToken();
+			
+			// Obtains label for cell
 			String cellID = (Spreadsheet.generateColumnLabel(theColumn) + (theRow + 1));//Edited this so the arrows move the spreadsheet correctly
 			cellToken.setRow(theRow);
 			cellToken.setColumn(theColumn);
@@ -596,6 +637,7 @@ public class GUI {
 			String s = (String) JOptionPane.showInputDialog(GUI, "Change formula for cell " + cellID + ":", 
 					"Change Cell Formula", JOptionPane.QUESTION_MESSAGE, null, null, former);
 
+			// Loop maintained as long as dialog box is not closed out/user presses Cancel
 			if (s != null) {
 				exit = true;
 				try {
