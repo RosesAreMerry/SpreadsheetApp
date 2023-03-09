@@ -5,6 +5,7 @@
 /**
  * a spreadsheet class has various functionalities 
  * @author malihahossain 
+ * @author Rosemary
  * @version 8th March 2023
  */
 package Spreadsheet;
@@ -26,7 +27,7 @@ public class Spreadsheet {
 	private static int myDimensions;
 	private Function<CellToken, Cell> lookupCell = (c) -> {
 		return cell[c.getRow()][c.getColumn()];
-		};
+	};
 	
 	
 	
@@ -93,6 +94,7 @@ public class Spreadsheet {
  /**
   * prints the formula of a single cell
   * @param cellToken
+  * @return value
  */
   public int getCellValue(CellToken cellToken) {
 		int row = cellToken.getRow(); //get the row.  
@@ -106,7 +108,7 @@ public class Spreadsheet {
 
   /**
    * print formulas of all the cells in the spreadsheet 
-   * @return string
+   * @return string- the formula at the cell
    */
   public String printAllFormulas(){	  
 		StringBuilder sb = new StringBuilder();
@@ -126,8 +128,9 @@ public class Spreadsheet {
   
   /**
    * Sets the current cellFomula to a new cellformula
-   * @param celltoken
-   * @param formula
+   * @param CellToken celltoken
+   * @param string formula
+   * @throws InvalidParameterException
    */
   public void changeCellFormula(CellToken celltoken, String formula) throws InvalidParameterException {
 	  int row = celltoken.getRow(); 
@@ -157,6 +160,7 @@ public class Spreadsheet {
  * changes the cell formula and recalculates the values of the spreadsheet.   
  * @param cellToken
  * @param formula
+ * @throws InvalidParameterException, RuntimeException
  */
   public void changeCellFormulaAndRecalculate(CellToken cellToken, String formula) throws InvalidParameterException, RuntimeException {
 	  changeCellFormula(cellToken, formula);
@@ -167,16 +171,17 @@ public class Spreadsheet {
    * changes the cell formula and recalculates the values of the spreadsheet.   
    * @param stringToken
    * @param formula
+   * @ throws InvalidParameterException, RuntimeException
    */
   public void changeCellFormulaAndRecalculate(String stringToken, String formula) throws InvalidParameterException, RuntimeException {
   	  changeCellFormula(stringToken, formula);
   	  recalculateAll();
  }
   
-	/**
+   /**
 	 * Create a topological sort of the spreadsheet.
 	 * @return sorted Arraylist according to their topological order
-	 */
+	*/
 	public ArrayList<Cell> topologicalSort() throws RuntimeException {
 		Map<Cell, ArrayList<Cell>> topMap = new HashMap<Cell, ArrayList<Cell>>();
 
@@ -244,7 +249,7 @@ public class Spreadsheet {
 	/**
 	 * Calculate the indegree
 	 * @throws RuntimeException
-	 */
+	*/
 
 	private void recalculateAll() throws RuntimeException {
 		ArrayList<Cell> sortedCells = topologicalSort();
@@ -261,7 +266,6 @@ public class Spreadsheet {
   
   /**
    * @return the number of rows in the spreadsheet 
-   * 
    */
   public int getNumRows() {
     return cell.length;
@@ -273,7 +277,6 @@ public class Spreadsheet {
     
     return cell[0].length;
   }
-  
   /**
    * Generates a complete file of the spreadsheet.
    * @return The formatted text file of the spreadsheet.
@@ -298,7 +301,6 @@ public class Spreadsheet {
 	  
 	  return sb.toString();
   }
-  
   /**
    * Returns a Spreadsheet object from a given file.
    * @param theFile The file to load the spreadsheet from.
@@ -315,8 +317,8 @@ public class Spreadsheet {
 	  	while (scan.hasNext()) {
 	  		String cellData = scan.nextLine();
 			int seperationIndex = cellData.indexOf(';');
-			String cellID = cellData.substring(0, seperationIndex).toUpperCase();
-			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length()).toUpperCase();
+			String cellID = cellData.substring(0, seperationIndex);
+			String cellFormula = cellData.substring(seperationIndex + 1, cellData.length());
 			returnSpreadsheet.changeCellFormula(cellID, cellFormula);
 	  	}
 
@@ -326,7 +328,6 @@ public class Spreadsheet {
 
 	  	return returnSpreadsheet;
   }
-  
   /**
 	 * Generates a column ID from a column index value.
 	 * @param theColumn The column index
@@ -352,6 +353,5 @@ public class Spreadsheet {
 		}
 		return cellID;
 	}
-  
   
 }

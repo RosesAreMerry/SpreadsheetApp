@@ -291,7 +291,7 @@ public class GUI {
             }
         });
         mSave.setEnabled(spreadsheetLoaded);
-        
+              
         final JMenuItem mExit = new JMenuItem("Exit");
         mExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
         mExit.addActionListener(new ActionListener() {
