@@ -432,8 +432,12 @@ public class GUI {
 	                }
 					if (save) {
 						String filePath = data.getAbsolutePath();
+						if (!filePath.endsWith(".txt")) { //Edited this in to append .txt at the end of the file name -Louis
+							filePath += ".txt";
+						}
 						BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
 						writer.write(mySpreadsheet.generateFile());
+
 						writer.close();
 						GUI.setTitle("TCSS 342 Spreadsheet App - " + data); 
 					}
