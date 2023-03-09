@@ -1,5 +1,12 @@
 package Cell.Tokens;
 
+/**
+ * This class represents an operator token.
+ * It has values for the operator and its priority and the number of parentheses it is in.
+ * It also has methods to evaluate the operator on two values.
+ * 
+ * @author Rosemary
+ */
 public class OperatorToken extends Token {
 
   public static final char Plus = '+';
@@ -25,10 +32,22 @@ public class OperatorToken extends Token {
   
   private char operator;
 
+  /**
+   * Return the operator of this OperatorToken.
+   * 
+   * @return The operator of this OperatorToken.
+   */
   public char getOperator() {
     return operator;
   }
 
+  /**
+   * Evaluate the operator on the two values.
+   * 
+   * @param val1 The first value.
+   * @param val2 The second value.
+   * @return The result of the operation.
+   */
   public int evaluate(int val1, int val2) {
     int returnVal = 0;
 
@@ -61,7 +80,8 @@ public class OperatorToken extends Token {
 
   /**
    * Return true if the char ch is an operator of a formula.
-   * Current operators are: +, -, *, /, (.
+   * Current operators are: +, -, *, /, ^.
+   * 
    * @param ch  a char
    * @return  whether ch is an operator
    */
@@ -114,7 +134,7 @@ public class OperatorToken extends Token {
     return parenPriority;
   }
 
-  /*
+  /**
   * Return the priority of this OperatorToken.
   *
   * default priorities:
@@ -122,12 +142,19 @@ public class OperatorToken extends Token {
   *   *, / : 1
   *   ^    : 2
   *
-  * @return  the priority of operatorToken
+  * @return The priority of operatorToken
   */
   public int getPriority() {
     return priority;
   }
   
+  /**
+   * Increment the parenPriority of this OperatorToken by the given amount.
+   * 
+   * parenPriority is priority that supercedes the default priority.
+   * 
+   * @param parenthesesCount The number of parentheses that this operator is in.
+   */
   public void incrementParenPriority(int parenthesesCount) {
     parenPriority += parenthesesCount;
   }

@@ -4,7 +4,6 @@ import java.util.Stack;
 import java.util.function.Function;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.List;
 
 import Cell.Tokens.CellToken;
 import Cell.Tokens.LiteralToken;
@@ -14,6 +13,8 @@ import Cell.Tokens.Token;
 /**
  * The Cell class handles keeping the function of a cell and calculating its value.
  * To calculate the value of a cell, it uses a postfix formula provided by the function getFormula.
+ * It also uses a function to get the value of a cell token from the Spreadsheet.
+ * 
  * @author Rosemary
  */
 public class Cell {
@@ -33,37 +34,63 @@ public class Cell {
     recalculate();
   }
 
+  /**
+   * Return the row of this cell.
+   */
   public int getRow() {
     return row;
   }
 
+  /**
+   * Return the column of this cell.
+   */
   public int getColumn() {
     return column;
   }
   
+  /**
+   * Set the row of this cell.
+   * @param row
+   */
   public void setRow(int row) {
     this.row = row;
   }
   
+  /**
+   * Set the column of this cell.
+   * @param column
+   */
   public void setColumn(int column) {
     this.column = column;
   }
   
+  /**
+   * Set the formula of this cell and calculate the postfix formula.
+   * @param formula
+   * @throws InvalidParameterException
+   */
   public void setFormula(String formula) throws InvalidParameterException {
     this.formula = formula;
     postfixFormula = getFormula(formula);
   }
   
+  /**
+   * Return the formula of this cell.
+   */
   public String getFormula() {
     return formula;
   }
   
+  /**
+   * Return the value of this cell.
+   */
   public int getValue() {
     return value;
   }
 
 
-  /** Function that returns a list of all cells that this cell depends on.
+  /** 
+   * Function that returns a list of all cells that this cell depends on.
    * 
    * @return ArrayList<Cell> list of all cells that this cell depends on.
    */
@@ -79,51 +106,78 @@ public class Cell {
 
   /**
    * Recalculate the value of this cell using the postfix formula.
+   * 
+   * @throws RuntimeException
    */
-  public void recalculate() {
+  public void recalculate() throws RuntimeException {
+
+    // initialize the stack of values.
     Stack<Integer> currentValues = new Stack<Integer>();
+
+    // prepare return variable.
     int result = 0;
 
+    // copy the postfix formula to a new stack.
     Stack<Token> formula = new Stack<Token>();
-
     formula.addAll(postfixFormula);
 
+    // while the formula is not empty, pop the top token and evaluate it.
     while (!formula.isEmpty()) {
       Token token = formula.pop();
-      Integer value = null;
+
       if (token instanceof LiteralToken) {
+        
+        // if the token is a literal, push it onto the stack of values.
         currentValues.push(((LiteralToken) token).getValue());
+
       } else if (token instanceof CellToken) {
         
+        // if the token is a cell, push the value of the cell onto the stack of values.
         Cell cell = getCellValue.apply((CellToken) token);
 
         if (cell != null) {
+
+          // if the cell is negated, push the negated value onto the stack of values.
           if (((CellToken) token).isNegated()) {
             currentValues.push(-getCellValue.apply((CellToken) token).getValue());
           } else {
             currentValues.push(getCellValue.apply((CellToken) token).getValue());
           }
         } else {
+          // if the cell is null, push 0 onto the stack of values.
           currentValues.push(0);
         }
       } else if (token instanceof OperatorToken) {
+        // if the token is an operator, pop the top two values from the stack of values,
+        // evaluate the operator with those values, and push the result onto the formula stack.
         if (currentValues.size() >= 2) {
-          value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
+          int value = ((OperatorToken) token).evaluate(currentValues.pop(), currentValues.pop());
           formula.push(new LiteralToken(value));
         } else {
+          // if there are not enough values on the stack of values, this is a sign that the formula is invalid.
           throw new RuntimeException("Bad Formula: " + this.formula);
         }
       }
+
+      // if the formula is a single literal, set the result to that literal.
       if (formula.size() == 1 && formula.peek() instanceof LiteralToken) {
+
         if (currentValues.size() > 0) {
+          // if there are still values on the stack of values, this is a sign that the formula is invalid.
           throw new RuntimeException("Bad Formula: " + this.formula);
         }
+
         result = ((LiteralToken) formula.pop()).getValue();
       }
+
       if (formula.isEmpty() && currentValues.size() == 1) {
+        // if the formula is empty and there is one value on the stack of values, set the result to that value.
+        // This is the case when the formula is a single cell reference or literal.
         result = currentValues.pop();
       }
     }
+
+    // set the value of this cell to the result.
     this.value = result;
   }
 
@@ -164,7 +218,7 @@ public class Cell {
     boolean lastCharWasValue = false; // Keep track of whether last char was value so - operators
     // can be handled correctly and multiple values throw a bad formula.
     
-    boolean nextValueIsNegated = false;
+    boolean nextValueIsNegated = false; // Keep track of whether next value should be negated.
 
     while (index < formula.length() ) {
         // get rid of leading whitespace characters
@@ -186,10 +240,15 @@ public class Cell {
           OperatorToken currentOperator = new OperatorToken(ch);
           currentOperator.incrementParenPriority(parenthesesCount);
           // We found an operator token
+
           if (!lastCharWasValue && ch == '-') {
+            // If the last char was not a value and the current char is a minus sign,
+            // then this - is a unary operator and the next value should be negated.
             nextValueIsNegated = true;
             index++;
           } else if (!lastCharWasValue) {
+            // If the last char was not a value and the current char is not a minus sign,
+            // then this is an invalid formula.
             error = true;
             break;
           } else {
@@ -231,13 +290,11 @@ public class Cell {
           }
         } else if (ch == '(') {
             // We found a left parenthesis
-            lastCharWasValue = false;
             parenthesesCount++;
             index++;
         }
         else if (ch == ')') {
             // We found a right parenthesis
-            lastCharWasValue = false;
             parenthesesCount--;
             if (parenthesesCount < 0) {
                 error = true;
@@ -284,6 +341,7 @@ public class Cell {
             } else {
                 // place the cell reference on the output stack
                 if (nextValueIsNegated) {
+                  // special case for negating a cell reference
                   cellToken.negate();
                   nextValueIsNegated = false;
                 }
@@ -307,6 +365,7 @@ public class Cell {
     }
     Stack<Token> temp = new Stack<Token>();
    
+    // Reverse the stack so that the first token is the first token in the formula.
     while (returnStack.empty() == false)
     {
       temp.push(returnStack.peek());

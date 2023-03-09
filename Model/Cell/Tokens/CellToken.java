@@ -1,5 +1,12 @@
 package Cell.Tokens;
 
+/**
+ * This class represents a cell token.
+ * It has column and row values and includes static functions to get cell tokens.
+ * from strings.
+ * 
+ * @author Rosemary
+ */
 public class CellToken extends Token {
   public static final int BADCELL = -1;
 
@@ -7,34 +14,56 @@ public class CellToken extends Token {
   private int row;
   private boolean negated = false;
 
+  /**
+   * return row of this CellToken.
+   */
   public int getRow() {
-    return row;
+	return row;
   }
   
+  /**
+   * return column of this CellToken.
+   */
   public int getColumn() {
-    return column;
+	  return column;
   }
   
+  /**
+   * set row of this CellToken.
+   * @param row
+   */
   public void setRow(int row) {
-    this.row = row;
+	  this.row = row;
   }
   
+  /**
+   * set column of this CellToken.
+   * @param column
+   */
   public void setColumn(int column) {
-    this.column = column;
+	  this.column = column;
   }
 
+  /**
+   * negate this CellToken. (store a boolean to track negation 
+   * so that we can negate the value of the associated cell when we get it)
+   */
   public void negate() {
-    negated = !negated;
+	  negated = !negated;
   }
 
+  /**
+   * return true if this CellToken is negated.
+   * @return negated
+   */
   public boolean isNegated() {
-    return negated;
+	  return negated;
   }
 
   /**
    *  Given a CellToken, print it out as it appears on the
    *  spreadsheet (e.g., "A3")
-   *  @return  the cellToken's coordinates
+   *  @return the cell token as a string
    */
   public String printCellToken () {
     char ch;
@@ -48,19 +77,19 @@ public class CellToken extends Token {
     // compute the biggest power of 26 that is less than or equal to col
     // We don't check for overflow of largest here.
     while (largest <= col) {
-        largest = largest * 26;
-        number_of_digits++;
+      largest = largest * 26;
+      number_of_digits++;
     }
     largest = largest / 26;
     number_of_digits--;
 
     // append the column label, one character at a time
     while (number_of_digits > 1) {
-        ch = (char) ((char) ((col / largest) - 1) + 'A');
-        returnString += ch;
-        col = col % largest;
-        largest = largest  / 26;
-        number_of_digits--;
+      ch = (char) ((char) ((col / largest) - 1) + 'A');
+      returnString += ch;
+      col = col % largest;
+      largest = largest  / 26;
+      number_of_digits--;
     }
 
     // handle last digit
@@ -106,24 +135,24 @@ public class CellToken extends Token {
     // handle a bad startIndex
     // handle  a bad startIndex
     if ((startIndex < 0) || (startIndex >= inputString.length() )) {
-        cellToken.setColumn(CellToken.BADCELL);
-        cellToken.setRow(CellToken.BADCELL);
-        return index;
+      cellToken.setColumn(CellToken.BADCELL);
+      cellToken.setRow(CellToken.BADCELL);
+      return index;
     }
 
     // get rid of leading whitespace characters
     while (index < inputString.length() ) {
-        ch = inputString.charAt(index);            
-        if (!Character.isWhitespace(ch)) {
-            break;
-        }
-        index++;
+      ch = inputString.charAt(index);            
+      if (!Character.isWhitespace(ch)) {
+        break;
+      }
+      index++;
     }
     if (index == inputString.length()) {
-        // reached the end of the string before finding a capital letter
-        cellToken.setColumn(CellToken.BADCELL);
-        cellToken.setRow(CellToken.BADCELL);
-        return index;
+      // reached the end of the string before finding a capital letter
+      cellToken.setColumn(CellToken.BADCELL);
+      cellToken.setRow(CellToken.BADCELL);
+      return index;
     }
 
     // ASSERT: index now points to the first non-whitespace character
@@ -132,28 +161,28 @@ public class CellToken extends Token {
     ch = inputString.charAt(index);            
     // process CAPITAL alphabetic characters to calculate the column
     if (!Character.isUpperCase(ch)) {
-        cellToken.setColumn(CellToken.BADCELL);
-        cellToken.setRow(CellToken.BADCELL);
-        return index;
+      cellToken.setColumn(CellToken.BADCELL);
+      cellToken.setRow(CellToken.BADCELL);
+      return index;
     } else {
-        column = ch - 'A';
-        index++;
+      column = ch - 'A';
+      index++;
     }
 
     while (index < inputString.length() ) {
-        ch = inputString.charAt(index);            
-        if (Character.isUpperCase(ch)) {
-            column = ((column + 1) * 26) + (ch - 'A');
-            index++;
-        } else {
-            break;
-        }
+      ch = inputString.charAt(index);            
+      if (Character.isUpperCase(ch)) {
+        column = ((column + 1) * 26) + (ch - 'A');
+        index++;
+      } else {
+        break;
+      }
     }
     if (index == inputString.length() ) {
-        // reached the end of the string before fully parsing the cell the reference
-        cellToken.setColumn(CellToken.BADCELL);
-        cellToken.setRow(CellToken.BADCELL);
-        return index;
+      // reached the end of the string before fully parsing the cell the reference
+      cellToken.setColumn(CellToken.BADCELL);
+      cellToken.setRow(CellToken.BADCELL);
+      return index;
     }
 
     // ASSERT: We have processed leading whitespace and the
@@ -161,34 +190,40 @@ public class CellToken extends Token {
 
     // read numeric characters to calculate the row
     if (Character.isDigit(ch)) {
-        row = ch - '0';
-        index++;
+      row = ch - '0';
+      index++;
     } else {
-        cellToken.setColumn(CellToken.BADCELL);
-        cellToken.setRow(CellToken.BADCELL);
-        return index;
+      cellToken.setColumn(CellToken.BADCELL);
+      cellToken.setRow(CellToken.BADCELL);
+      return index;
     }
 
     while (index < inputString.length() ) {
-        ch = inputString.charAt(index);            
-        if (Character.isDigit(ch)) {
-            row = (row * 10) + (ch - '0');
-            index++;
-        } else {
-            break;
-        }
+      ch = inputString.charAt(index);            
+      if (Character.isDigit(ch)) {
+        row = (row * 10) + (ch - '0');
+        index++;
+      } else {
+        break;
+      }
     }
 
     // successfully parsed a cell reference
     cellToken.setColumn(column);
     cellToken.setRow(row-1 /* convert to zero-based */);
     return index;
-    }
+	}
 
-    public static CellToken getCellToken(String inputString) {
-        CellToken cellToken = new CellToken();
-        getCellToken(inputString, 0, cellToken);
-        return cellToken;
-    }
+  /**
+   * Given a string, return a CellToken that contains the column and row
+   * of the cell reference in the string.
+   * @param inputString
+   * @return a CellToken
+   */
+	public static CellToken getCellToken(String inputString) {
+    CellToken cellToken = new CellToken();
+    getCellToken(inputString, 0, cellToken);
+    return cellToken;
+	}
 
 }
